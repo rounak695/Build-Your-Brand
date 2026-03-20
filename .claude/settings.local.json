@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(rm -rf node_modules package-lock.json)",
+      "Bash(npm install:*)",
+      "Bash(npm run:*)",
+      "Bash(node -e \":*)",
+      "Bash(find node_modules/@google/genai/build -name *.d.ts)",
+      "Bash(node --input-type=module:*)"
+    ]
+  }
+}

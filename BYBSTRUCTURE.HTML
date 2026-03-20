@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Brand Builder — Architecture v2.0</title>
+    <style>
+        :root {
+            --bg: #0b0b0f;
+            --bg2: #111118;
+            --bg3: #18181f;
+            --bg4: #1e1e28;
+            --border: rgba(255, 255, 255, 0.07);
+            --border2: rgba(255, 255, 255, 0.12);
+            --text: #e8e6f0;
+            --muted: #8b89a0;
+            --dim: #4a4860;
+            --blue: #4f8fff;
+            --blue-bg: rgba(79, 143, 255, 0.08);
+            --blue-border: rgba(79, 143, 255, 0.22);
+            --purple: #a78bfa;
+            --purple-bg: rgba(167, 139, 250, 0.08);
+            --purple-border: rgba(167, 139, 250, 0.22);
+            --teal: #2dd4bf;
+            --teal-bg: rgba(45, 212, 191, 0.08);
+            --teal-border: rgba(45, 212, 191, 0.22);
+            --amber: #fbbf24;
+            --amber-bg: rgba(251, 191, 36, 0.08);
+            --amber-border: rgba(251, 191, 36, 0.22);
+            --green: #34d399;
+            --green-bg: rgba(52, 211, 153, 0.08);
+            --green-border: rgba(52, 211, 153, 0.22);
+            --coral: #fb7185;
+            --coral-bg: rgba(251, 113, 133, 0.08);
+            --coral-border: rgba(251, 113, 133, 0.22);
+            --orange: #fb923c;
+            --orange-bg: rgba(251, 146, 60, 0.08);
+            --orange-border: rgba(251, 146, 60, 0.22);
+            --indigo: #818cf8;
+            --indigo-bg: rgba(129, 140, 248, 0.08);
+            --indigo-border: rgba(129, 140, 248, 0.22);
+            --gold: #f59e0b;
+            --gold-bg: rgba(245, 158, 11, 0.09);
+            --gold-border: rgba(245, 158, 11, 0.25);
+            --r: 8px;
+            --r2: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+            min-height: 100vh
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+        .page {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 48px 24px 80px
+        }
+
+        /* Header */
+        .header {
+            margin-bottom: 40px
+        }
+
+        .header-eyebrow {
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 10px
+        }
+
+        .header-title {
+            font-size: 32px;
+            font-weight: 600;
+            letter-spacing: -.02em;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #e8e6f0 40%, var(--purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text
+        }
+
+        .header-sub {
+            font-size: 14px;
+            color: var(--muted);
+            line-height: 1.7
+        }
+
+        .header-badges {
+            display: flex;
+            gap: 8px;
+            margin-top: 14px;
+            flex-wrap: wrap
+        }
+
+        .hbadge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 500;
+            border: 0.5px solid
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 3px;
+            margin-bottom: 28px;
+            background: var(--bg2);
+            border: 0.5px solid var(--border);
+            border-radius: var(--r2);
+            padding: 4px;
+            flex-wrap: wrap
+        }
+
+        .tab {
+            padding: 7px 16px;
+            border-radius: var(--r);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            background: none;
+            color: var(--muted);
+            transition: all .15s
+        }
+
+        .tab:hover {
+            color: var(--text);
+            background: var(--bg3)
+        }
+
+        .tab.on {
+            background: var(--bg3);
+            color: var(--text);
+            border: 0.5px solid var(--border2)
+        }
+
+        .tc {
+            display: none
+        }
+
+        .tc.on {
+            display: block
+        }
+
+        /* Section labels */
+        .slbl {
+            font-size: 10.5px;
+            font-weight: 600;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 16px
+        }
+
+        /* Pipeline */
+        .pipe-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 0
+        }
+
+        .pipe-row {
+            display: flex;
+            gap: 14px;
+            align-items: stretch
+        }
+
+        .pipe-left {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 36px;
+            flex-shrink: 0
+        }
+
+        .pipe-num {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            border: 0.5px solid var(--border2);
+            background: var(--bg3);
+            color: var(--muted);
+            flex-shrink: 0
+        }
+
+        .pipe-num.dna {
+            background: var(--purple-bg);
+            border-color: var(--purple-border);
+            color: var(--purple)
+        }
+
+        .pipe-num.out {
+            background: var(--gold-bg);
+            border-color: var(--gold-border);
+            color: var(--gold)
+        }
+
+        .pipe-num.new {
+            background: var(--teal-bg);
+            border-color: var(--teal-border);
+            color: var(--teal)
+        }
+
+        .pipe-line {
+            width: 1px;
+            background: var(--border);
+            flex: 1;
+            min-height: 12px;
+            margin: 2px 0
+        }
+
+        .pipe-node {
+            flex: 1;
+            padding: 12px 16px;
+            border-radius: var(--r);
+            border: 0.5px solid var(--border);
+            background: var(--bg2);
+            margin-bottom: 8px;
+            transition: border-color .15s
+        }
+
+        .pipe-node:hover {
+            border-color: var(--border2)
+        }
+
+        .pipe-node.dna {
+            border-color: var(--purple-border);
+            background: var(--purple-bg)
+        }
+
+        .pipe-node.out {
+            border-color: var(--gold-border);
+            background: var(--gold-bg)
+        }
+
+        .pipe-node.new {
+            border-color: var(--teal-border);
+            background: var(--teal-bg)
+        }
+
+        .pipe-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text)
+        }
+
+        .pipe-name.dna {
+            color: var(--purple)
+        }
+
+        .pipe-name.out {
+            color: var(--gold)
+        }
+
+        .pipe-name.new {
+            color: var(--teal)
+        }
+
+        .pipe-desc {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 3px;
+            line-height: 1.5
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 10.5px;
+            font-weight: 600;
+            margin-top: 7px;
+            border: 0.5px solid
+        }
+
+        /* Cards grid */
+        .g2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px
+        }
+
+        .g3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 14px
+        }
+
+        .g4 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 12px
+        }
+
+        @media(max-width:700px) {
+
+            .g2,
+            .g3,
+            .g4 {
+                grid-template-columns: 1fr
+            }
+        }
+
+        .card {
+            background: var(--bg2);
+            border: 0.5px solid var(--border);
+            border-radius: var(--r2);
+            padding: 16px 20px
+        }
+
+        .card-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 4px
+        }
+
+        .card-sub {
+            font-size: 12px;
+            color: var(--muted);
+            margin-bottom: 12px;
+            line-height: 1.5
+        }
+
+        /* Model rows */
+        .mrow {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 13px 0;
+            border-bottom: 0.5px solid var(--border)
+        }
+
+        .mrow:last-child {
+            border-bottom: none;
+            padding-bottom: 0
+        }
+
+        .mbadge {
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+            flex-shrink: 0;
+            margin-top: 1px;
+            font-family: 'JetBrains Mono', monospace;
+            border: 0.5px solid;
+            min-width: 140px;
+            text-align: center
+        }
+
+        .mname {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text)
+        }
+
+        .mdesc {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 3px;
+            line-height: 1.55
+        }
+
+        .mtag {
+            display: inline-block;
+            padding: 1px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: 500;
+            border: 0.5px solid;
+            margin-top: 5px;
+            margin-right: 4px
+        }
+
+        /* Dot rows */
+        .drow {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 7px 0;
+            border-bottom: 0.5px solid var(--border)
+        }
+
+        .drow:last-child {
+            border-bottom: none;
+            padding-bottom: 0
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            margin-top: 6px;
+            flex-shrink: 0
+        }
+
+        /* JSON / Mono */
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            line-height: 1.8;
+            background: var(--bg);
+            border: 0.5px solid var(--border);
+            border-radius: var(--r);
+            padding: 16px;
+            margin-top: 12px;
+            overflow-x: auto
+        }
+
+        .k {
+            color: #79b8ff
+        }
+
+        .s {
+            color: var(--green)
+        }
+
+        .n {
+            color: var(--coral)
+        }
+
+        .a {
+            color: var(--amber)
+        }
+
+        /* Stats */
+        .stat {
+            background: var(--bg3);
+            border: 0.5px solid var(--border);
+            border-radius: var(--r2);
+            padding: 16px;
+            text-align: center
+        }
+
+        .stat-num {
+            font-size: 32px;
+            font-weight: 600;
+            line-height: 1;
+            margin-bottom: 4px;
+            color: var(--text)
+        }
+
+        .stat-lbl {
+            font-size: 11px;
+            color: var(--muted)
+        }
+
+        /* Pills */
+        .pill {
+            display: inline-block;
+            padding: 5px 11px;
+            border-radius: 20px;
+            font-size: 12px;
+            background: var(--bg3);
+            border: 0.5px solid var(--border);
+            margin: 3px;
+            color: var(--text)
+        }
+
+        /* Output cards */
+        .out-card {
+            border-radius: var(--r2);
+            padding: 20px;
+            border: 0.5px solid
+        }
+
+        .out-card-lbl {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            padding: 3px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 12px;
+            border: 0.5px solid
+        }
+
+        .out-card-title {
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: -.01em;
+            margin-bottom: 8px
+        }
+
+        .out-item {
+            font-size: 12.5px;
+            color: var(--muted);
+            line-height: 2;
+            padding-left: 2px
+        }
+
+        .out-item::before {
+            content: '✦ ';
+            font-size: 9px;
+            opacity: .5
+        }
+
+        .out-footer {
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 14px
+        }
+
+        /* Mono file tags */
+        .mfile {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11.5px;
+            padding: 3px 9px;
+            background: var(--bg);
+            border: 0.5px solid var(--border);
+            border-radius: 4px;
+            display: inline-block;
+            margin: 3px 3px 3px 0;
+            color: var(--teal)
+        }
+
+        /* Section divider */
+        .divr {
+            height: 0.5px;
+            background: var(--border);
+            margin: 24px 0
+        }
+
+        /* Intro blurb */
+        .intro {
+            font-size: 14px;
+            color: var(--muted);
+            line-height: 1.75;
+            margin-bottom: 20px
+        }
+
+        /* New tag */
+        .new-tag {
+            font-size: 9.5px;
+            font-weight: 700;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            background: var(--teal-bg);
+            color: var(--teal);
+            border: 0.5px solid var(--teal-border);
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin-left: 8px;
+            vertical-align: middle
+        }
+
+        /* Version badge */
+        .ver {
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 7px;
+            background: var(--purple-bg);
+            border: 0.5px solid var(--purple-border);
+            color: var(--purple);
+            border-radius: 4px;
+            letter-spacing: .04em
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+
+        <!-- HEADER -->
+        <div class="header">
+            <div class="header-eyebrow">Architecture Document <span class="ver">v2.0</span></div>
+            <div class="header-title">AI Brand Builder</div>
+            <div class="header-sub">Brand DNA–driven generation pipeline · Vector-based style consistency · ₹2,000/month
+                infrastructure budget</div>
+            <div class="header-badges">
+                <span class="hbadge"
+                    style="background:var(--purple-bg);border-color:var(--purple-border);color:var(--purple)">Supabase +
+                    pgvector</span>
+                <span class="hbadge"
+                    style="background:var(--blue-bg);border-color:var(--blue-border);color:var(--blue)">Vercel
+                    Serverless</span>
+                <span class="hbadge"
+                    style="background:var(--orange-bg);border-color:var(--orange-border);color:var(--orange)">Cloudflare
+                    R2</span>
+                <span class="hbadge"
+                    style="background:var(--coral-bg);border-color:var(--coral-border);color:var(--coral)">Upstash
+                    Redis</span>
+                <span class="hbadge"
+                    style="background:var(--teal-bg);border-color:var(--teal-border);color:var(--teal)">7 AI
+                    Models</span>
+            </div>
+        </div>
+
+        <!-- TABS -->
+        <div class="tabs">
+            <button class="tab on" data-t="pipeline" onclick="go('pipeline')">Pipeline</button>
+            <button class="tab" data-t="dna" onclick="go('dna')">Brand DNA</button>
+            <button class="tab" data-t="infra" onclick="go('infra')">Infrastructure</button>
+            <button class="tab" data-t="models" onclick="go('models')">AI Models</button>
+            <button class="tab" data-t="outputs" onclick="go('outputs')">Key Outputs ★</button>
+            <button class="tab" data-t="cost" onclick="go('cost')">Cost &amp; Security</button>
+        </div>
+
+        <!-- ====== PIPELINE ====== -->
+        <div id="tc-pipeline" class="tc on">
+            <p class="slbl">Core generation pipeline · 12 stages</p>
+            <div class="pipe-wrap" id="pipe-stages"></div>
+            <p style="font-size:12px;color:var(--muted);margin-top:10px">All stages consume Brand DNA as primary context
+                · Regenerations always reuse existing Brand DNA · New: React Wireframe + Social Media Campaign outputs
+                added post-asset generation</p>
+        </div>
+
+        <!-- ====== BRAND DNA ====== -->
+        <div id="tc-dna" class="tc">
+            <p class="intro">The Brand DNA is the core data structure that controls all generation tasks. Generated once
+                per brand project and threaded through every AI prompt as primary context. GPT-4o holds this context
+                across the full session and at regeneration time.</p>
+            <div class="g2" style="margin-bottom:16px">
+                <div class="card">
+                    <div class="card-title">Lifecycle rules</div>
+                    <div class="card-sub">How Brand DNA is managed across the session</div>
+                    <div class="drow">
+                        <div class="dot" style="background:var(--purple)"></div>
+                        <div><span style="font-weight:600">Generated once</span> per brand project — never rebuilt on
+                            regen</div>
+                    </div>
+                    <div class="drow">
+                        <div class="dot" style="background:var(--purple)"></div>
+                        <div>All AI prompts <span style="font-weight:600">must include</span> Brand DNA as primary
+                            context</div>
+                    </div>
+                    <div class="drow">
+                        <div class="dot" style="background:var(--purple)"></div>
+                        <div>GPT-4o <span style="font-weight:600">holds context</span> throughout the chat and at
+                            regeneration</div>
+                    </div>
+                    <div class="drow">
+                        <div class="dot" style="background:var(--purple)"></div>
+                        <div>Style vector stored permanently via <span style="font-weight:600">pgvector</span> — never
+                            re-embedded</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Style vector pipeline</div>
+                    <div class="card-sub">Inspiration → embedding → vector → DNA</div>
+                    <div style="font-size:13px;line-height:2.2">
+                        <div style="color:var(--text)">Inspiration Images</div>
+                        <div style="color:var(--muted);font-size:12px;padding-left:10px">↓ GPT-image-1.5 vision analysis
+                        </div>
+                        <div style="color:var(--text)">Embedding generation</div>
+                        <div style="color:var(--muted);font-size:12px;padding-left:10px">↓ OpenAI text-embedding-3-small
+                        </div>
+                        <div style="color:var(--text)">Vector stored in pgvector</div>
+                        <div style="color:var(--muted);font-size:12px;padding-left:10px">↓ enables similarity search
+                        </div>
+                        <div style="color:var(--text)">Appended to Brand DNA object</div>
+                    </div>
+                </div>
+            </div>
+            <p class="slbl">Example Brand DNA object</p>
+            <div class="mono">
+                <span class="a">{</span><br>
+                &nbsp;&nbsp;<span
+                    class="k">"brand_id"</span>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                    class="s">"uuid-v4"</span>,<br>
+                &nbsp;&nbsp;<span class="k">"brand_idea"</span>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="s">"AI
+                    productivity tool"</span>,<br>
+                &nbsp;&nbsp;<span class="k">"industry"</span>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                    class="s">"SaaS"</span>,<br>
+                &nbsp;&nbsp;<span class="k">"target_audience"</span>: <span class="s">"startup founders"</span>,<br>
+                &nbsp;&nbsp;<span class="k">"visual_style"</span>:&nbsp;&nbsp;&nbsp;&nbsp;<span class="s">"minimal
+                    tech"</span>,<br>
+                &nbsp;&nbsp;<span
+                    class="k">"colors"</span>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                    class="a">["#0A0A0A", "#2563EB", "#F8F8F7"]</span>,<br>
+                &nbsp;&nbsp;<span class="k">"typography"</span>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="s">"modern
+                    sans-serif"</span>,<br>
+                &nbsp;&nbsp;<span class="k">"voice_tone"</span>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span
+                    class="s">"confident, minimal, founder-focused"</span>,<br>
+                &nbsp;&nbsp;<span class="k">"style_vector"</span>:&nbsp;&nbsp;&nbsp;&nbsp;<span class="a">[<span
+                        class="n">0.231</span>, <span class="n">0.553</span>, <span class="n">0.889</span>, <span
+                        class="n">...]</span></span>,<br>
+                &nbsp;&nbsp;<span class="k">"inspiration_sources"</span>: <span class="a">[]</span>,<br>
+                &nbsp;&nbsp;<span class="k">"created_at"</span>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                    class="s">"ISO8601 timestamp"</span><br>
+                <span class="a">}</span>
+            </div>
+        </div>
+
+        <!-- ====== INFRASTRUCTURE ====== -->
+        <div id="tc-infra" class="tc">
+            <p class="intro">Serverless-first stack designed to stay within ₹2,000/month. Every layer is pay-per-use. No
+                persistent servers. AI calls are exclusively server-side.</p>
+            <div class="g2" style="margin-bottom:14px">
+                <div class="card">
+                    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
+                        <div class="card-title">Supabase PostgreSQL</div>
+                        <span class="badge"
+                            style="background:var(--blue-bg);border-color:var(--blue-border);color:var(--blue)">Database</span>
+                    </div>
+                    <div class="card-sub">Primary store with vector support</div>
+                    <div class="drow">
+                        <div class="dot" style="background:var(--blue)"></div>
+                        <div><strong>pgvector extension</strong> — style vector storage + cosine similarity search</div>
+                    </div>
+                    <div class="drow">
+                        <div class="dot" style="background:var(--blue)"></div>
+                        <div><strong>Tables:</strong> users · brands · brand_vectors · generations · assets · payments
+                        </div>
+                    </div>
+                    <div class="drow">
+                        <div class="dot" style="background:var(--blue)"></div>
+                        <div><strong>Built-in Supabase Auth</strong> for user management and RLS policies</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
+                        <div class="card-title">Vercel</div>
+                        <span class="badge"
+                            style="background:var(--green-bg);border-color:var(--green-border);color:var(--green)">Hosting</span>
+                    </div>
+                    <div class="card-sub">Next.js frontend + serverless AI endpoints</div>
+                    <div class="drow">
+                        <div class="dot" style="background:var(--green)"></div>
+                        <div><strong>API routes only</strong> — all AI calls run server-side, keys never exposed</div>
+                    </div>
+                    <div class="drow">
+                        <div class="dot" style="background:var(--green)"></div>
+                        <div><strong>Edge deployment</strong> — low-latency streaming responses for chat</div>
+                    </div>
+                    <div class="drow">
+                        <div class="dot" style="background:var(--green)"></div>
+                        <div><strong>Pay per invocation</strong> — ideal for bursty AI workloads</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
+                        <div class="card-title">Cloudflare R2</div>
+                        <span class="badge"
+                            style="background:var(--amber-bg);border-color:var(--amber-border);color:var(--amber)">Storage</span>
+                    </div>
+                    <div class="card-sub">Zero egress fee asset storage</div>
+                    <div class="drow">
+                        <div class="dot" style="background:var(--amber)"></div>
+                        <div><strong>File structure:</strong> brand-assets/{brand_id}/logos/ · moodboards/ ·
+                            social-assets/ · wireframes/</div>
+                    </div>
+                    <div class="drow">
+                        <div class="dot" style="background:var(--amber)"></div>
+                        <div><strong>Stores:</strong> logos · moodboards · social campaign assets · Brand Package JSON
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
+                        <div class="card-title">Upstash Redis</div>
+                        <span class="badge"
+                            style="background:var(--coral-bg);border-color:var(--coral-border);color:var(--coral)">Queue</span>
+                    </div>
+                    <div class="card-sub">Background jobs and rate limiting</div>
+                    <div class="drow">
+                        <div class="dot" style="background:var(--coral)"></div>
+                        <div><strong>Queue flow:</strong> Request → Job → Worker runs AI → Result stored in DB</div>
+                    </div>
+                    <div class="drow">
+                        <div class="dot" style="background:var(--coral)"></div>
+                        <div><strong>Rate limiting:</strong> per-user counters enforced before any AI call fires</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card" style="background:var(--bg3)">
+                <div class="card-title">AI Orchestration Layer · /lib/ai/</div>
+                <div class="card-sub">TypeScript modules — each pipeline stage maps to one file</div>
+                <div style="margin-top:8px">
+                    <span class="mfile">brandDNA.ts</span>
+                    <span class="mfile">inspirationAnalyzer.ts</span>
+                    <span class="mfile">nameGenerator.ts</span>
+                    <span class="mfile">moodboardGenerator.ts</span>
+                    <span class="mfile">logoGenerator.ts</span>
+                    <span class="mfile">brandGuidelineGenerator.ts</span>
+                    <span class="mfile">assetGenerator.ts</span>
+                    <span class="mfile">wireframeGenerator.ts</span>
+                    <span class="mfile">socialCampaignGenerator.ts</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====== AI MODELS ====== -->
+        <div id="tc-models" class="tc">
+            <p class="intro">Each task is routed to the most purpose-fit model. No generic routing — every model has a
+                specific, exclusive responsibility. Context is held by GPT-4o throughout the session and regeneration
+                cycles.</p>
+            <div class="card" style="margin-bottom:16px">
+
+                <div class="mrow">
+                    <span class="mbadge"
+                        style="background:var(--amber-bg);border-color:var(--amber-border);color:var(--amber)">gpt-image-1.5</span>
+                    <div>
+                        <div class="mname">Brand Asset Generation — Accuracy</div>
+                        <div class="mdesc">High-fidelity logo rendering, brand asset pack elements, and any generation
+                            where pixel-perfect precision and consistent brand color accuracy is paramount. Used when
+                            output must exactly match specified hex values and layout.</div>
+                        <span class="mtag"
+                            style="background:var(--amber-bg);border-color:var(--amber-border);color:var(--amber)">Logos</span>
+                        <span class="mtag"
+                            style="background:var(--amber-bg);border-color:var(--amber-border);color:var(--amber)">Brand
+                            Asset Pack</span>
+                        <span class="mtag"
+                            style="background:var(--amber-bg);border-color:var(--amber-border);color:var(--amber)">Icon
+                            sets</span>
+                    </div>
+                </div>
+
+                <div class="mrow">
+                    <span class="mbadge"
+                        style="background:var(--purple-bg);border-color:var(--purple-border);color:var(--purple)">nano-banana-pro</span>
+                    <div>
+                        <div class="mname">Brand Asset Generation — Creativity</div>
+                        <div class="mdesc">Moodboard exploration, experimental visual directions, and brand assets where
+                            creative interpretation and unexpected aesthetics matter more than strict specification
+                            adherence. Used for divergent generation passes.</div>
+                        <span class="mtag"
+                            style="background:var(--purple-bg);border-color:var(--purple-border);color:var(--purple)">Moodboards</span>
+                        <span class="mtag"
+                            style="background:var(--purple-bg);border-color:var(--purple-border);color:var(--purple)">Creative
+                            directions</span>
+                        <span class="mtag"
+                            style="background:var(--purple-bg);border-color:var(--purple-border);color:var(--purple)">Social
+                            visuals</span>
+                    </div>
+                </div>
+
+                <div class="mrow">
+                    <span class="mbadge"
+                        style="background:var(--orange-bg);border-color:var(--orange-border);color:var(--orange)">claude-opus-4.6</span>
+                    <div>
+                        <div class="mname">Coding Tasks</div>
+                        <div class="mdesc">React high-fidelity wireframe generation, interactive component creation, and
+                            all technical code output. Handles complex component logic, Tailwind layouts, and full-page
+                            UI scaffolding from Brand DNA specs.</div>
+                        <span class="mtag"
+                            style="background:var(--orange-bg);border-color:var(--orange-border);color:var(--orange)">React
+                            wireframes</span>
+                        <span class="mtag"
+                            style="background:var(--orange-bg);border-color:var(--orange-border);color:var(--orange)">Interactive
+                            UI</span>
+                        <span class="mtag"
+                            style="background:var(--orange-bg);border-color:var(--orange-border);color:var(--orange)">Component
+                            scaffolding</span>
+                    </div>
+                </div>
+
+                <div class="mrow">
+                    <span class="mbadge"
+                        style="background:var(--teal-bg);border-color:var(--teal-border);color:var(--teal)">gemini-2.5-pro</span>
+                    <div>
+                        <div class="mname">User Chat Intelligence — Humanized</div>
+                        <div class="mdesc">Powers the conversational brand architect experience. Drives the narrative
+                            moodboard presentation, brand psychology explanations, and all exploratory creative
+                            dialogue. Gives the AI a creative director persona — never robotic, always collaborative.
+                        </div>
+                        <span class="mtag"
+                            style="background:var(--teal-bg);border-color:var(--teal-border);color:var(--teal)">Brand
+                            architect chat</span>
+                        <span class="mtag"
+                            style="background:var(--teal-bg);border-color:var(--teal-border);color:var(--teal)">Moodboard
+                            narrative</span>
+                        <span class="mtag"
+                            style="background:var(--teal-bg);border-color:var(--teal-border);color:var(--teal)">Brand
+                            psychology</span>
+                    </div>
+                </div>
+
+                <div class="mrow">
+                    <span class="mbadge"
+                        style="background:var(--indigo-bg);border-color:var(--indigo-border);color:var(--indigo)">claude-haiku</span>
+                    <div>
+                        <div class="mname">Decision Making &amp; Instructions</div>
+                        <div class="mdesc">Fast, lightweight routing decisions — classifying user intent, deciding which
+                            pipeline stage to trigger next, generating structured instructions for other models, and
+                            enforcing regeneration limit checks before expensive calls fire.</div>
+                        <span class="mtag"
+                            style="background:var(--indigo-bg);border-color:var(--indigo-border);color:var(--indigo)">Intent
+                            routing</span>
+                        <span class="mtag"
+                            style="background:var(--indigo-bg);border-color:var(--indigo-border);color:var(--indigo)">Pipeline
+                            decisions</span>
+                        <span class="mtag"
+                            style="background:var(--indigo-bg);border-color:var(--indigo-border);color:var(--indigo)">Regen
+                            gate checks</span>
+                    </div>
+                </div>
+
+                <div class="mrow" style="border-bottom:none;padding-bottom:0">
+                    <span class="mbadge"
+                        style="background:var(--blue-bg);border-color:var(--blue-border);color:var(--blue)">gpt-4o</span>
+                    <div>
+                        <div class="mname">Context Holding — Session &amp; Regeneration</div>
+                        <div class="mdesc">Maintains the full Brand DNA context across the entire user session. Acts as
+                            the persistent memory layer — ensures every regeneration, every downstream task, and every
+                            model call has complete awareness of the brand's established direction. Also handles brand
+                            vision analysis from uploaded inspiration images.</div>
+                        <span class="mtag"
+                            style="background:var(--blue-bg);border-color:var(--blue-border);color:var(--blue)">Session
+                            context</span>
+                        <span class="mtag"
+                            style="background:var(--blue-bg);border-color:var(--blue-border);color:var(--blue)">Regeneration
+                            memory</span>
+                        <span class="mtag"
+                            style="background:var(--blue-bg);border-color:var(--blue-border);color:var(--blue)">Inspiration
+                            analysis</span>
+                    </div>
+                </div>
+
+            </div>
+            <div class="g2">
+                <div class="card">
+                    <div class="card-title">Model selection principle</div>
+                    <p style="font-size:13px;color:var(--muted);line-height:1.7;margin-top:6px">No single model does
+                        everything. Accuracy-critical image work goes to gpt-image-1.5. Creative exploration uses
+                        nano-banana-pro. Chat persona runs on Gemini. Code stays with Claude Opus. Haiku handles fast
+                        decisions cheaply.</p>
+                </div>
+                <div class="card">
+                    <div class="card-title">Context persistence strategy</div>
+                    <p style="font-size:13px;color:var(--muted);line-height:1.7;margin-top:6px">GPT-4o carries Brand DNA
+                        as the session-persistent context object. Serialized to Supabase after each stage. Retrieved at
+                        regeneration time. Haiku uses this to gate decisions without re-loading expensive context
+                        itself.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====== KEY OUTPUTS ====== -->
+        <div id="tc-outputs" class="tc">
+            <p class="intro">Every brand generation pipeline must produce all four deliverables. The Moodboard and Brand
+                Package JSON are mandatory primary outputs. React Wireframe and Social Campaigns are mandatory secondary
+                outputs added in v2.0.</p>
+            <div class="g2" style="margin-bottom:20px">
+                <div class="out-card" style="border-color:var(--gold-border);background:var(--gold-bg)">
+                    <div class="out-card-lbl"
+                        style="background:rgba(0,0,0,0.2);border-color:var(--gold-border);color:var(--gold)">For Humans
+                    </div>
+                    <div class="out-card-title">Moodboard</div>
+                    <p style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:14px">Four visual
+                        directions presented as narrative stories. Each described with atmosphere, brand connection, and
+                        emotional tone before the image appears. Powered by nano-banana-pro for creative divergence.</p>
+                    <div class="out-item">Color palette and dominant mood</div>
+                    <div class="out-item">Typography personality and pairing</div>
+                    <div class="out-item">Imagery style and subject direction</div>
+                    <div class="out-item">Layout density and whitespace feel</div>
+                    <div class="out-item">Aesthetic identity — cultural signals</div>
+                    <div class="out-footer" style="color:var(--gold)">Human understanding → Visual story</div>
+                </div>
+                <div class="out-card" style="border-color:var(--blue-border);background:var(--blue-bg)">
+                    <div class="out-card-lbl"
+                        style="background:rgba(0,0,0,0.2);border-color:var(--blue-border);color:var(--blue)">For
+                        Machines</div>
+                    <div class="out-card-title">Brand Package JSON</div>
+                    <p style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:14px">Structured
+                        machine-readable output. Consumed by external AI agents — Claude Opus generates React wireframes
+                        directly from this JSON. Single source of truth for all downstream digital product generation.
+                    </p>
+                    <div class="out-item">Complete Brand DNA + style_vector</div>
+                    <div class="out-item">Full color system with hex values</div>
+                    <div class="out-item">Typography scale, weights, line-heights</div>
+                    <div class="out-item">Logo asset URLs from Cloudflare R2</div>
+                    <div class="out-item">Voice, tone, personality, avoid list</div>
+                    <div class="out-footer" style="color:var(--blue)">Machine understanding → Downstream generation
+                    </div>
+                </div>
+                <div class="out-card" style="border-color:var(--teal-border);background:var(--teal-bg)">
+                    <div class="out-card-lbl"
+                        style="background:rgba(0,0,0,0.2);border-color:var(--teal-border);color:var(--teal)">New in v2.0
+                        · For Developers</div>
+                    <div class="out-card-title">React Wireframe <span
+                            style="font-size:13px;font-weight:400;color:var(--muted)">(Interactive)</span></div>
+                    <p style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:14px">High-fidelity
+                        interactive React components generated by Claude Opus 4.6, consuming the Brand Package JSON
+                        directly. Fully functional, Tailwind-styled, ready for developer handoff or Storybook
+                        integration.</p>
+                    <div class="out-item">Brand-accurate color tokens applied</div>
+                    <div class="out-item">Typography scale from Brand DNA</div>
+                    <div class="out-item">Navigation, hero, cards, CTA sections</div>
+                    <div class="out-item">Interactive states and hover effects</div>
+                    <div class="out-item">Developer-ready component export</div>
+                    <div class="out-footer" style="color:var(--teal)">Brand JSON → React component code</div>
+                </div>
+                <div class="out-card" style="border-color:var(--coral-border);background:var(--coral-bg)">
+                    <div class="out-card-lbl"
+                        style="background:rgba(0,0,0,0.2);border-color:var(--coral-border);color:var(--coral)">New in
+                        v2.0 · For Marketing</div>
+                    <div class="out-card-title">Social Media Campaigns</div>
+                    <p style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:14px">Platform-ready
+                        marketing campaign assets generated at native resolution. nano-banana-pro for creative visuals,
+                        Gemini 2.5 for copy. Brand-consistent across all formats — launch-ready.</p>
+                    <div class="out-item">Instagram post + story (1:1 + 9:16)</div>
+                    <div class="out-item">Twitter / X card (2:1)</div>
+                    <div class="out-item">LinkedIn banner (4:1)</div>
+                    <div class="out-item">Campaign copy aligned to brand voice</div>
+                    <div class="out-item">Hashtag and caption suggestions</div>
+                    <div class="out-footer" style="color:var(--coral)">Brand DNA → Platform-ready assets</div>
+                </div>
+            </div>
+            <p class="slbl">Brand Package JSON · full schema v2.0</p>
+            <div class="mono">
+                <span class="a">{</span><br>
+                &nbsp;&nbsp;<span class="k">"brand_id"</span>: <span class="s">"uuid"</span>,<br>
+                &nbsp;&nbsp;<span class="k">"brand_name"</span>: <span class="s">"Acme AI"</span>,<br>
+                &nbsp;&nbsp;<span class="k">"version"</span>: <span class="s">"2.0"</span>,<br>
+                &nbsp;&nbsp;<span class="k">"dna"</span>: { <span class="k">"industry"</span>: <span
+                    class="s">"SaaS"</span>, <span class="k">"target_audience"</span>: <span class="s">"startup
+                    founders"</span>, <span class="k">"visual_style"</span>: <span class="s">"minimal tech"</span>
+                },<br>
+                &nbsp;&nbsp;<span class="k">"colors"</span>: { <span class="k">"primary"</span>: <span
+                    class="s">"#0A0A0A"</span>, <span class="k">"accent"</span>: <span class="s">"#2563EB"</span>, <span
+                    class="k">"background"</span>: <span class="s">"#FFFFFF"</span>, <span class="k">"surface"</span>:
+                <span class="s">"#F8F8F7"</span> },<br>
+                &nbsp;&nbsp;<span class="k">"typography"</span>: { <span class="k">"heading"</span>: <span
+                    class="s">"Inter"</span>, <span class="k">"body"</span>: <span class="s">"DM Sans"</span>, <span
+                    class="k">"mono"</span>: <span class="s">"JetBrains Mono"</span>, <span class="k">"scale"</span>:
+                <span class="s">"1.25"</span> },<br>
+                &nbsp;&nbsp;<span class="k">"logos"</span>: { <span class="k">"primary"</span>: <span
+                    class="s">"https://r2.cf/..."</span>, <span class="k">"dark"</span>: <span
+                    class="s">"https://r2.cf/..."</span>, <span class="k">"icon"</span>: <span
+                    class="s">"https://r2.cf/..."</span> },<br>
+                &nbsp;&nbsp;<span class="k">"voice"</span>: { <span class="k">"tone"</span>: <span class="s">"confident,
+                    minimal"</span>, <span class="k">"personality"</span>: <span class="s">"founder-focused"</span>,
+                <span class="k">"avoid"</span>: <span class="s">"corporate jargon"</span> },<br>
+                &nbsp;&nbsp;<span class="k">"social_assets"</span>: { <span class="k">"instagram_post"</span>: <span
+                    class="s">"https://r2.cf/..."</span>, <span class="k">"story"</span>: <span
+                    class="s">"https://r2.cf/..."</span>, <span class="k">"linkedin_banner"</span>: <span
+                    class="s">"https://r2.cf/..."</span> },<br>
+                &nbsp;&nbsp;<span class="k">"wireframe_url"</span>: <span
+                    class="s">"https://r2.cf/brand_id/wireframes/landing_v1.tsx"</span>,<br>
+                &nbsp;&nbsp;<span class="k">"moodboard_url"</span>: <span
+                    class="s">"https://r2.cf/brand_id/moodboards/selected.png"</span>,<br>
+                &nbsp;&nbsp;<span class="k">"style_vector"</span>: <span class="a">[<span class="n">0.231</span>, <span
+                        class="n">0.553</span>, <span class="n">0.889</span>, <span class="n">...]</span></span>,<br>
+                &nbsp;&nbsp;<span class="k">"guidelines_url"</span>: <span
+                    class="s">"https://r2.cf/brand_id/guidelines.pdf"</span>,<br>
+                &nbsp;&nbsp;<span class="k">"generated_at"</span>: <span class="s">"2025-01-01T00:00:00Z"</span><br>
+                <span class="a">}</span>
+            </div>
+        </div>
+
+        <!-- ====== COST & SECURITY ====== -->
+        <div id="tc-cost" class="tc">
+            <p class="slbl">Regeneration limits · controls AI spend</p>
+            <div class="g4" style="margin-bottom:24px">
+                <div class="stat">
+                    <div class="stat-num">3×</div>
+                    <div class="stat-lbl">Name suggestions</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-num">2×</div>
+                    <div class="stat-lbl">Moodboards</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-num">3×</div>
+                    <div class="stat-lbl">Logo concepts</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-num">2×</div>
+                    <div class="stat-lbl">Brand guidelines</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-num">2×</div>
+                    <div class="stat-lbl">React wireframe</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-num">3×</div>
+                    <div class="stat-lbl">Social campaigns</div>
+                </div>
+            </div>
+            <div class="g2" style="margin-bottom:18px">
+                <div>
+                    <p class="slbl">Cost control rules</p>
+                    <div class="card">
+                        <div class="drow">
+                            <div class="dot" style="background:var(--green)"></div>
+                            <div><strong>Avoid unnecessary AI calls</strong> — gate all generation behind explicit user
+                                actions</div>
+                        </div>
+                        <div class="drow">
+                            <div class="dot" style="background:var(--green)"></div>
+                            <div><strong>Cache all generation results</strong> — serve from Supabase, regen only on
+                                explicit request</div>
+                        </div>
+                        <div class="drow">
+                            <div class="dot" style="background:var(--green)"></div>
+                            <div><strong>Haiku for fast decisions</strong> — lightweight model handles routing, no
+                                expensive model wasted on gating</div>
+                        </div>
+                        <div class="drow">
+                            <div class="dot" style="background:var(--green)"></div>
+                            <div><strong>Style vector is permanent</strong> — embedded once, never re-computed unless
+                                inspiration changes</div>
+                        </div>
+                        <div class="drow">
+                            <div class="dot" style="background:var(--green)"></div>
+                            <div><strong>Serverless only</strong> — pay per invocation, zero idle server cost</div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <p class="slbl">Security rules</p>
+                    <div class="card">
+                        <div class="drow">
+                            <div class="dot" style="background:var(--coral)"></div>
+                            <div><strong>API keys server-side only</strong> — never in frontend bundles or client-side
+                                code</div>
+                        </div>
+                        <div class="drow">
+                            <div class="dot" style="background:var(--coral)"></div>
+                            <div><strong>All AI calls in Vercel routes</strong> — zero direct client → AI calls</div>
+                        </div>
+                        <div class="drow">
+                            <div class="dot" style="background:var(--coral)"></div>
+                            <div><strong>Upload validation required</strong> — type, size, content validated before R2
+                                storage</div>
+                        </div>
+                        <div class="drow">
+                            <div class="dot" style="background:var(--coral)"></div>
+                            <div><strong>Rate limiting via Redis</strong> — Upstash enforces per-user limits before AI
+                                fires</div>
+                        </div>
+                        <div class="drow">
+                            <div class="dot" style="background:var(--coral)"></div>
+                            <div><strong>Supabase RLS policies</strong> — row-level security on all brand data tables
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p class="slbl">Future upgrade path · post-MVP</p>
+            <div style="margin-bottom:16px">
+                <span class="pill">Advanced style vector clustering</span>
+                <span class="pill">Template-based asset generation</span>
+                <span class="pill">Brand website generation</span>
+                <span class="pill">AI brand voice training</span>
+                <span class="pill">Design system generation</span>
+                <span class="pill">Multi-brand workspace</span>
+                <span class="pill">Brand consistency scoring</span>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const stages = [
+            { n: 1, name: 'Idea', desc: 'User submits brand concept, industry, and target audience', badge: null, type: '' },
+            { n: 2, name: 'Inspiration Upload', desc: 'Images, URLs, brand names, Dribbble / Behance screenshots accepted', badge: null, type: '' },
+            { n: 3, name: 'Inspiration Analysis', desc: 'Visual style features extracted — colors, mood, layout density, cultural signals', badge: 'gpt-4o · vision', bstyle: 'blue', type: '' },
+            { n: 4, name: 'Style Vector Creation', desc: 'AI descriptions converted to embeddings — stored permanently in pgvector', badge: 'text-embedding-3-small', bstyle: 'purple', type: '' },
+            { n: 5, name: 'Brand DNA Generation', desc: 'Core context object created — feeds all downstream stages · held in session by GPT-4o', badge: 'Central Hub · GPT-4o context', bstyle: 'purple', type: 'dna' },
+            { n: 6, name: 'Name Suggestions', desc: 'Brand name concepts aligned with DNA, visual identity, and target audience', badge: 'Gemini 2.5 Pro', bstyle: 'teal', type: '' },
+            { n: 7, name: 'Moodboard Generation', desc: 'Four visual directions presented as narrative stories through Gemini chat', badge: 'nano-banana-pro · creative', bstyle: 'purple', type: '' },
+            { n: 8, name: 'Logo Generation', desc: 'Logo concepts guided by Brand DNA and style vector — accuracy-first', badge: 'gpt-image-1.5 · accurate', bstyle: 'amber', type: '' },
+            { n: 9, name: 'Brand Guidelines', desc: 'Color system, typography scale, usage rules, brand voice documentation', badge: 'Gemini 2.5 Pro', bstyle: 'teal', type: '' },
+            { n: 10, name: 'Brand Asset Pack → JSON Export', desc: 'Moodboard + Brand Package JSON — primary mandatory outputs delivered', badge: 'Key Output', bstyle: 'gold', type: 'out' },
+            { n: 11, name: 'React High Fidelity Wireframe', desc: 'Interactive React components generated directly from Brand Package JSON — developer-ready', badge: 'claude-opus-4.6 · new', bstyle: 'orange', type: 'new' },
+            { n: 12, name: 'Social Media Campaigns', desc: 'Platform-ready campaign assets at native resolution — Instagram, Twitter, LinkedIn', badge: 'nano-banana-pro + Gemini · new', bstyle: 'teal', type: 'new' },
+        ];
+
+        const bstyles = {
+            blue: 'background:var(--blue-bg);border-color:var(--blue-border);color:var(--blue)',
+            purple: 'background:var(--purple-bg);border-color:var(--purple-border);color:var(--purple)',
+            teal: 'background:var(--teal-bg);border-color:var(--teal-border);color:var(--teal)',
+            amber: 'background:var(--amber-bg);border-color:var(--amber-border);color:var(--amber)',
+            green: 'background:var(--green-bg);border-color:var(--green-border);color:var(--green)',
+            coral: 'background:var(--coral-bg);border-color:var(--coral-border);color:var(--coral)',
+            orange: 'background:var(--orange-bg);border-color:var(--orange-border);color:var(--orange)',
+            gold: 'background:var(--gold-bg);border-color:var(--gold-border);color:var(--gold)',
+        };
+
+        const c = document.getElementById('pipe-stages');
+        stages.forEach((s, i) => {
+            const isLast = i === stages.length - 1;
+            const badge = s.badge ? `<span class="badge" style="${bstyles[s.bstyle] || ''}">${s.badge}</span>` : '';
+            c.innerHTML += `
+    <div class="pipe-row">
+      <div class="pipe-left">
+        <div class="pipe-num ${s.type}">${s.n}</div>
+        ${!isLast ? '<div class="pipe-line"></div>' : ''}
+      </div>
+      <div style="flex:1;margin-bottom:6px">
+        <div class="pipe-node ${s.type}">
+          <div class="pipe-name ${s.type}">${s.name}</div>
+          <div class="pipe-desc">${s.desc}</div>
+          ${badge}
+        </div>
+      </div>
+    </div>`;
+        });
+
+        function go(name) {
+            document.querySelectorAll('.tc').forEach(t => t.classList.remove('on'));
+            document.getElementById('tc-' + name).classList.add('on');
+            document.querySelectorAll('.tab').forEach(b => b.classList.remove('on'));
+            document.querySelector('[data-t="' + name + '"]').classList.add('on');
+        }
+    </script>
+</body>
+
+</html>
