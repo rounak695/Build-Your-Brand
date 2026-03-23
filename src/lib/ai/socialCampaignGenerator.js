@@ -16,9 +16,6 @@ export async function generateSocialCampaigns(dna, brandName, brandPackage) {
     const colors = (dna.colors || ['#0A0A0A', '#2563EB', '#F8F8F7']).join(', ');
     const style = dna.visual_style || 'modern minimal';
     const voice = dna.voice_tone || dna.tone_of_voice || 'confident and professional';
-    const productCategory = dna.product_category || dna.industry || 'modern business';
-    const domainKeywords = (dna.domain_keywords || []).join(', ') || dna.industry || '';
-    const domainConstraint = dna.domain_constraint || '';
 
     // 1. Generate campaign copy with Gemini 2.5 Pro
     let campaignCopy;
@@ -26,17 +23,15 @@ export async function generateSocialCampaigns(dna, brandName, brandPackage) {
         const ai = new GoogleGenAI({ apiKey: key });
         const copyResponse = await ai.models.generateContent({
             model: 'gemini-2.5-pro',
-            contents: `Generate social media campaign copy for "${brandName}", a ${productCategory} brand.
-Brand voice: ${voice}. Industry: ${dna.industry}. Audience: ${dna.target_audience}. Product domain: ${productCategory}.
-
-CRITICAL: All copy must specifically reference ${productCategory}. Use domain keywords: ${domainKeywords}. Do NOT write about unrelated products or services. ${domainConstraint}
+            contents: `Generate social media campaign copy for "${brandName}".
+Brand voice: ${voice}. Industry: ${dna.industry}. Audience: ${dna.target_audience}.
 
 Return ONLY valid JSON (no markdown, no code fences):
 {
-  "instagram": { "caption": "Instagram post caption about ${productCategory}", "hashtags": ["tag1", "tag2", "tag3", "tag4", "tag5"] },
-  "twitter": { "tweet": "Tweet text about ${productCategory} (280 chars max)", "hashtags": ["tag1", "tag2"] },
-  "linkedin": { "post": "LinkedIn post text about ${productCategory} (2-3 sentences)", "hashtags": ["tag1", "tag2", "tag3"] },
-  "campaign_theme": "One-line campaign theme relevant to ${productCategory}"
+  "instagram": { "caption": "Instagram post caption", "hashtags": ["tag1", "tag2", "tag3", "tag4", "tag5"] },
+  "twitter": { "tweet": "Tweet text (280 chars max)", "hashtags": ["tag1", "tag2"] },
+  "linkedin": { "post": "LinkedIn post text (2-3 sentences)", "hashtags": ["tag1", "tag2", "tag3"] },
+  "campaign_theme": "One-line campaign theme"
 }`,
             config: { responseMimeType: 'application/json' }
         });
@@ -62,9 +57,7 @@ Return ONLY valid JSON (no markdown, no code fences):
             console.log(`[socialCampaign] Generating ${platform.name}...`);
             const response = await ai.models.generateContent({
                 model: 'gemini-3-pro-image-preview',
-                contents: `Create a ${platform.desc} social media campaign visual for "${brandName}", a ${productCategory} brand. Style: ${style}. Colors: ${colors}. Aspect ratio: ${platform.aspect}. Campaign theme: "${campaignCopy.campaign_theme || 'Launch'}". Professional, brand-consistent, modern design. Include brand name text "${brandName}" prominently.
-
-DOMAIN CONSTRAINT: ${domainConstraint} The visual must prominently feature ${productCategory} products/imagery. Domain keywords: ${domainKeywords}. Do NOT depict unrelated products or categories.`,
+                contents: `Create a ${platform.desc} social media campaign visual for "${brandName}". Style: ${style}. Colors: ${colors}. Aspect ratio: ${platform.aspect}. Campaign theme: "${campaignCopy.campaign_theme || 'Launch'}". Professional, brand-consistent, modern design. Include brand name text "${brandName}" prominently.`,
                 config: {
                     responseModalities: ['IMAGE', 'TEXT']
                 }

@@ -18,9 +18,6 @@ export async function generateMoodboards(dna, brandName) {
     const industry = dna.industry || 'modern business';
     const name = brandName || dna.brand_idea;
     const slug = (brandName || name || 'brand').replace(/[^a-zA-Z0-9]/g, '') || 'brand';
-    const productCategory = dna.product_category || industry;
-    const domainKeywords = (dna.domain_keywords || []).join(', ') || industry;
-    const domainConstraint = dna.domain_constraint || '';
 
     const directions = [
         {
@@ -46,9 +43,7 @@ export async function generateMoodboards(dna, brandName) {
     ];
 
     async function generateOne(dir) {
-        const prompt = `Create a high-end, professional brand moodboard for "${name}". Product category: ${productCategory}. Industry: ${industry}. Style: ${style}. Colors: ${colorList}. Typography: ${typo}. Direction: ${dir.name}. ${dir.focus}
-
-DOMAIN CONSTRAINT: ${domainConstraint} All photos, imagery, and product references must specifically depict ${productCategory}. Relevant keywords: ${domainKeywords}. Do NOT include imagery of unrelated products or categories.`;
+        const prompt = `Create a high-end, professional brand moodboard for "${name}". Industry: ${industry}. Style: ${style}. Colors: ${colorList}. Typography: ${typo}. Direction: ${dir.name}. ${dir.focus}`;
 
         try {
             const ai = new GoogleGenAI({ apiKey: key });

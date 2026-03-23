@@ -147,30 +147,25 @@ export async function regenerate(type, dna, brandName, brandId) {
     }
 
     // Check current count
-    let count = 0;
-    if (brandId) {
-        const { data: existing } = await supabase
-            .from('generations')
-            .select('regen_count')
-            .eq('brand_id', brandId)
-            .eq('type', type)
-            .single()
-            .catch(() => ({ data: null }));
-        count = existing?.regen_count || 0;
-    }
+    const { data: existing } = await supabase
+        .from('generations')
+        .select('regen_count')
+        .eq('brand_id', brandId)
+        .eq('type', type)
+        .single()
+        .catch(() => ({ data: null }));
 
+    const count = existing?.regen_count || 0;
     if (count >= limit) {
         return { error: `Regeneration limit reached (${count}/${limit})`, limitReached: true };
     }
 
     // Upsert generation record
-    if (brandId) {
-        await supabase.from('generations').upsert({
-            brand_id: brandId,
-            type,
-            regen_count: count + 1
-        }, { onConflict: 'brand_id,type' }).catch(() => { });
-    }
+    await supabase.from('generations').upsert({
+        brand_id: brandId,
+        type,
+        regen_count: count + 1
+    }, { onConflict: 'brand_id,type' }).catch(() => { });
 
     // Execute regeneration (reuses Brand DNA per architecture rule)
     const remaining = limit - count - 1;

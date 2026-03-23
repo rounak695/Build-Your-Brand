@@ -240,6 +240,7 @@ Four visual directions presented as narrative stories. Each described with atmos
 
 *Human understanding → Visual story*
 
+
 ### Brand Package JSON
 
 **For Machines**

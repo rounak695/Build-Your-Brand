@@ -18,14 +18,10 @@ export async function generateNames(dna) {
 
 Brand DNA:
 - Idea: "${dna.brand_idea}"
-- Product Category: "${dna.product_category || dna.industry || 'auto-detect'}"
 - Industry: "${dna.industry}"
 - Audience: "${dna.target_audience}"
 - Style: "${dna.visual_style}"
 - Traits: ${JSON.stringify(dna.personality_traits || [])}
-- Domain Keywords: ${JSON.stringify(dna.domain_keywords || [])}
-
-IMPORTANT: The names must be relevant to the ${dna.product_category || dna.industry || 'brand'} domain. They should evoke the product category and resonate with the target audience.
 
 Each name must be 1-3 words max, easy to pronounce. Return ONLY valid JSON (no markdown, no code fences):
 {

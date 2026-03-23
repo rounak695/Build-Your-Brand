@@ -64,14 +64,9 @@
     }
     
     export function centerView() {
-        panTo(0, 0);
-    }
-
-    export function panTo(targetX, targetY) {
-        // targetX and targetY are the canvas coordinates we want mapped to the center of the screen
         scale = 1;
-        x = (width / 2) - targetX;
-        y = (height / 2) - targetY;
+        x = width / 2;
+        y = height / 2;
     }
     
     onMount(() => {
@@ -116,23 +111,25 @@
         class="absolute origin-top-left will-change-transform"
         style="transform: translate({x}px, {y}px) scale({scale});"
     >
-        <!-- Nodes are placed at absolute (0,0) based coordinates inside here -->
-        <slot />
+        <!-- Center wrapper -->
+        <div class="absolute -translate-x-1/2 -translate-y-1/2 w-[1200px] flex justify-center items-center">
+            <slot />
+        </div>
     </div>
     
     <!-- Controls (Mini-map / Zoom) -->
     <div class="absolute bottom-8 right-8 flex flex-col items-end gap-4 z-50">
-        <!-- Minimap Placeholder representing a 5000x3000 virtual space -->
+        <!-- Minimap Placeholder -->
         <div class="w-48 h-32 bg-surface-container-high/80 backdrop-blur border border-outline-variant/30 rounded-lg relative overflow-hidden ghost-border shadow-2xl transition-all hover:border-primary/30 cursor-pointer" on:click={centerView}>
             <div class="absolute inset-0 bg-[radial-gradient(circle,#E5E2E1_1px,transparent_1px)] bg-[size:10px_10px] opacity-10 pointer-events-none"></div>
             
             <!-- Viewport indication box -->
-            <div class="absolute border border-primary/50 bg-primary/10 rounded transition-all duration-300 pointer-events-none"
+            <div class="absolute border border-primary/50 bg-primary/10 rounded transition-all duration-75 pointer-events-none"
                  style="
-                    width: {Math.min(100, (width / 5000) * 100 / scale)}%; 
-                    height: {Math.min(100, (height / 3000) * 100 / scale)}%; 
-                    left: {50 - ((x - width/2) / 5000 * 100 / scale)}%; 
-                    top: {50 - ((y - height/2) / 3000 * 100 / scale)}%;
+                    width: {Math.min(100, (width / 1200) * 100 / scale)}%; 
+                    height: {Math.min(100, (height / 800) * 100 / scale)}%; 
+                    left: {50 - ((x - width/2) / 1200 * 100 / scale)}%; 
+                    top: {50 - ((y - height/2) / 800 * 100 / scale)}%;
                     transform: translate(-50%, -50%);
                  "
             ></div>

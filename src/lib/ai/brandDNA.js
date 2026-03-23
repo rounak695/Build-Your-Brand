@@ -17,21 +17,11 @@ export async function createBrandDNA(input) {
             messages: [
                 {
                     role: 'system',
-                    content: `You are a Brand DNA architect. Generate a comprehensive Brand DNA object that will be the core context for ALL downstream brand generation (logos, moodboards, campaigns, naming).
-
-CRITICAL RULES:
-1. Extract the EXACT product/service category from the user's idea. If the user says "sunglass brand", the product_category MUST be "eyewear/sunglasses", NOT "fashion" generically.
-2. Generate domain_keywords that are SPECIFIC to the product (e.g. ["sunglasses", "eyewear", "lenses", "frames", "UV protection"]).
-3. The domain_constraint MUST instruct all downstream AI to ONLY generate content about this specific product. Do NOT allow drift into unrelated categories.
-
-Return ONLY valid JSON:
+                    content: `You are a Brand DNA architect. Generate a comprehensive Brand DNA object that will be the core context for all downstream brand generation. Return ONLY valid JSON:
 {
-  "brand_idea": "The user's business idea, restated clearly",
-  "product_category": "The SPECIFIC product/service type (e.g. 'eyewear/sunglasses', 'artisan coffee', 'fitness apparel')",
-  "domain_keywords": ["keyword1", "keyword2", "keyword3", "keyword4", "keyword5"],
-  "domain_constraint": "All brand outputs (logos, moodboards, ads, copy) must exclusively feature and reference [product]. Do not generate unrelated imagery such as [common drift categories]. Stay strictly within the [product] domain.",
+  "brand_idea": "The user's business idea",
   "industry": "The industry category",
-  "target_audience": "Who the brand serves — be specific about demographics and psychographics",
+  "target_audience": "Who the brand serves",
   "visual_style": "The visual direction",
   "colors": ["#hex1", "#hex2", "#hex3", "#hex4", "#hex5"],
   "typography": "Font family recommendation",
@@ -44,9 +34,7 @@ Return ONLY valid JSON:
                 },
                 {
                     role: 'user',
-                    content: `Business idea: "${input.brandIdea}". Industry: "${input.industry || 'auto-detect'}". Visual style from inspiration: "${input.styleDescription || 'modern'}". Dominant colors: ${JSON.stringify(input.colors || [])}. Keywords: ${JSON.stringify(input.keywords || [])}.
-
-IMPORTANT: Carefully extract the specific product/service from my idea. The product_category and domain_keywords must precisely reflect what I'm building — do NOT generalize.`
+                    content: `Business idea: "${input.brandIdea}". Industry: "${input.industry || 'auto-detect'}". Visual style from inspiration: "${input.styleDescription || 'modern'}". Dominant colors: ${JSON.stringify(input.colors || [])}. Keywords: ${JSON.stringify(input.keywords || [])}.`
                 }
             ],
             response_format: { type: 'json_object' },
@@ -61,12 +49,8 @@ IMPORTANT: Carefully extract the specific product/service from my idea. The prod
 }
 
 function mockDNA(input) {
-    const idea = input.brandIdea || 'A modern business';
     return {
-        brand_idea: idea,
-        product_category: input.industry || 'technology products',
-        domain_keywords: ['technology', 'software', 'digital', 'innovation', 'platform'],
-        domain_constraint: `All brand outputs must exclusively feature and reference technology/software products. Do not generate unrelated imagery. Stay strictly within the tech domain.`,
+        brand_idea: input.brandIdea || 'A modern business',
         industry: input.industry || 'Technology',
         target_audience: 'Modern professionals aged 25-45',
         visual_style: input.styleDescription || 'Minimal tech',

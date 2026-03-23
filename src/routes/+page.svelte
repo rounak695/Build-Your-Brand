@@ -1,353 +1,278 @@
 <script>
-    import { onMount, tick } from "svelte";
-    
-    export let data;
-    export let form;
+	import ChatPanel from "$lib/components/ChatPanel.svelte";
+	import PreviewPanel from "$lib/components/PreviewPanel.svelte";
+	import AssetsPanel from "$lib/components/AssetsPanel.svelte";
 
-    // Silence Svelte IDE unused warnings while still preventing runtime 'unknown prop' warnings
-    $: _data = data;
-    $: _form = form;
-    
-    import TopNav from "$lib/components/TopNav.svelte";
-    import SideNav from "$lib/components/SideNav.svelte";
-    import IdeaPanel from "$lib/components/IdeaPanel.svelte";
-    import BrandDNAPanel from "$lib/components/BrandDNAPanel.svelte";
-    import MoodboardPanel from "$lib/components/MoodboardPanel.svelte";
-    import AssetsWorkspace from "$lib/components/AssetsWorkspace.svelte";
-    import InfiniteCanvas from "$lib/components/InfiniteCanvas.svelte";
-    import DraggableNode from "$lib/components/DraggableNode.svelte";
-    import { downloadSVG, downloadPNG, downloadBrandPackage, downloadAllAsZip } from "$lib/exportService.js";
+	let step = "IDEA_INPUT";
+	let messages = [
+		{
+			role: "ai",
+			content:
+				"Hey there.\n\nI'm your AI Brand Architect — think of me as your creative director for this project.\n\nTell me about the business, product, or idea you want to build a brand for. Even a rough concept works — we'll shape it together.",
+		},
+	];
+	let brandData = {
+		idea: "",
+		name: "",
+		tagline: "",
+		industry: "",
+		inspirations: [],
+		inspirationAnalyses: [],
+		brandDNA: null,
+		brandId: null,
+		nameOptions: null,
+		moodboards: null,
+		selectedMoodboard: null,
+		logos: null,
+		guidelines: null,
+		assets: null,
+		brandPackage: null,
+		wireframe: null,
+		socialCampaigns: null,
+		regenCounts: { names: 0, moodboards: 0, logos: 0, guidelines: 0, wireframe: 0, socialCampaigns: 0 },
+	};
+	let isLoading = false;
 
-    // --- State ---
-    let step = "IDEA_INPUT"; // IDEA_INPUT, INSPIRATION_UPLOAD, NAME_SELECTION, MOODBOARD_SELECTION, DONE
-    $: isInfiniteCanvasMode = step !== "IDEA_INPUT" && step !== "INSPIRATION_UPLOAD";
-    let messages = [];
-    let isLoading = false;
-    let error = null;
-    let canvasRef;
+	function handleSendMessage(msg) {
+		if (isLoading) return;
+		messages = [...messages, { role: "user", content: msg }];
+		progressWorkflow(msg);
+	}
 
-    let brandData = {
-        idea: "",
-        inspirations: [],
-        brandDNA: null,
-        nameOptions: null,
-        name: "",
-        tagline: "",
-        moodboards: null,
-        selectedMoodboard: null,
-        logos: null,
-        guidelines: null,
-        wireframe: null,
-        socialCampaigns: null,
-        brandPackage: null,
-        regenCounts: { names: 0, moodboards: 0, logos: 0, guidelines: 0, wireframe: 0, socialCampaigns: 0 }
-    };
+	async function progressWorkflow(userMsg) {
+		isLoading = true;
+		try {
+			const res = await fetch("/api/chat", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ step, message: userMsg, brandData }),
+			});
+			const data = await res.json();
 
-    // --- Handlers ---
-    async function handleSendMessage(text) {
-        brandData.idea = text;
-        messages = [...messages, { role: "user", content: text }];
-        isLoading = true;
-        error = null;
+			if (step === "IDEA_INPUT") {
+				if (data.nextStep === "IDEA_INPUT") {
+					messages = [
+						...messages,
+						{ role: "ai", content: data.content },
+					];
+				} else {
+					brandData.idea = userMsg;
+					step = "INSPIRATION_UPLOAD";
+					messages = [
+						...messages,
+						{
+							role: "ai",
+							content: data.content,
+							showInspirationUpload: true,
+						},
+					];
+				}
+			} else if (step === "INSPIRATION_UPLOAD") {
+				brandData.brandDNA = data.brandDNA;
+				brandData.brandId = data.brandId;
+				brandData.nameOptions = data.names;
+				step = "NAME_SELECTION";
+				messages = [
+					...messages,
+					{
+						role: "ai",
+						content: data.content,
+						nameOptions: data.names,
+					},
+				];
+			} else if (step === "NAME_SELECTION") {
+				brandData.name = userMsg;
+				brandData.moodboards = data.moodboards;
+				step = "MOODBOARD_SELECTION";
+				messages = [...messages, { role: "ai", content: data.content }];
+			} else if (step === "MOODBOARD_SELECTION") {
+				brandData.logos = data.logos;
+				brandData.guidelines = data.guidelines;
+				brandData.assets = data.assets;
+				brandData.brandPackage = data.brandPackage;
+				brandData.wireframe = data.wireframe;
+				brandData.socialCampaigns = data.socialCampaigns;
+				step = "DONE";
+				messages = [...messages, { role: "ai", content: data.content }];
+			} else if (step === "DONE") {
+				messages = [...messages, { role: "ai", content: data.content }];
+			}
+		} catch (e) {
+			console.error("Error:", e);
+			messages = [
+				...messages,
+				{
+					role: "ai",
+					content: "Something went wrong. Please try again.",
+				},
+			];
+		} finally {
+			isLoading = false;
+		}
+	}
 
-        try {
-            const response = await fetch("/api/chat", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    messages,
-                    step: "IDEA_INPUT",
-                    message: text,
-                    brandData: null,
-                }),
-            });
-            if (!response.ok) throw new Error("API Request Failed");
+	async function handleInspirationSubmit(inspirations) {
+		if (isLoading) return;
+		brandData.inspirations = inspirations;
+		messages = [
+			...messages,
+			{
+				role: "user",
+				content: `Added ${inspirations.length} inspiration(s)`,
+			},
+		];
 
-            const result = await response.json();
-            messages = [...messages, { role: "ai", content: result.message, showInspirationUpload: true }];
-            step = "INSPIRATION_UPLOAD";
-        } catch (err) {
-            console.error(err);
-            error = "Failed to process idea. Please try again.";
-            messages = messages.slice(0, -1);
-        } finally {
-            isLoading = false;
-        }
-    }
+		isLoading = true;
+		try {
+			const res = await fetch("/api/chat", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					step: "INSPIRATION_UPLOAD",
+					message: "",
+					brandData,
+				}),
+			});
+			const data = await res.json();
+			brandData.brandDNA = data.brandDNA;
+			brandData.brandId = data.brandId;
+			brandData.nameOptions = data.names;
+			step = "NAME_SELECTION";
+			messages = [
+				...messages,
+				{
+					role: "ai",
+					content: data.content,
+					nameOptions: data.names,
+				},
+			];
+		} catch (e) {
+			console.error("Inspiration error:", e);
+			messages = [
+				...messages,
+				{
+					role: "ai",
+					content: "Failed to analyze inspirations. Try again.",
+				},
+			];
+		} finally {
+			isLoading = false;
+		}
+	}
 
-    async function handleInspirationSubmit(inspirations) {
-        brandData.inspirations = inspirations;
-        isLoading = true;
-        error = null;
+	function handleSelectName(name) {
+		if (step !== "NAME_SELECTION") return;
+		handleSendMessage(name.name);
+	}
 
-        try {
-            const response = await fetch("/api/chat", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    messages,
-                    step: "INSPIRATION_UPLOAD",
-                    brandData,
-                })
-            });
+	async function handleSelectMoodboard(moodboard) {
+		if (step !== "MOODBOARD_SELECTION") return;
+		brandData.selectedMoodboard = moodboard;
+		messages = [
+			...messages,
+			{
+				role: "user",
+				content: `I choose: ${moodboard.name}`,
+			},
+		];
 
-            if (!response.ok) throw new Error("API request failed");
-            const result = await response.json();
+		isLoading = true;
+		try {
+			const res = await fetch("/api/chat", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					step: "MOODBOARD_SELECTION",
+					message: moodboard.name,
+					brandData,
+				}),
+			});
+			const data = await res.json();
+			brandData.logos = data.logos;
+			brandData.guidelines = data.guidelines;
+			brandData.assets = data.assets;
+			brandData.brandPackage = data.brandPackage;
+			brandData.wireframe = data.wireframe;
+			brandData.socialCampaigns = data.socialCampaigns;
+			step = "DONE";
+			messages = [...messages, { role: "ai", content: data.content }];
+		} catch (e) {
+			console.error("Finalize error:", e);
+			step = "DONE";
+			messages = [
+				...messages,
+				{
+					role: "ai",
+					content:
+						"Brand finalized with some issues. Check available assets.",
+				},
+			];
+		} finally {
+			isLoading = false;
+		}
+	}
 
-            brandData.brandDNA = result.brandDNA;
-            brandData.nameOptions = result.names;
-            brandData.brandId = result.brandId;
-            brandData.regenCounts.names = 0;
-            step = "NAME_SELECTION";
-            tick().then(() => canvasRef?.panTo(700, 0));
-        } catch (err) {
-            console.error(err);
-            error = "Neural lab analysis failed. Please retry.";
-        } finally {
-            isLoading = false;
-        }
-    }
+	async function handleRegenerate(type) {
+		isLoading = true;
+		try {
+			const res = await fetch("/api/regenerate", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					type,
+					brandDNA: brandData.brandDNA,
+					brandName: brandData.name,
+					brandId: brandData.brandId,
+				}),
+			});
+			const data = await res.json();
 
-    async function handleSelectName(nameObj) {
-        brandData.name = nameObj.name;
-        brandData.tagline = nameObj.tagline;
-        isLoading = true;
-        error = null;
+			if (data.error) {
+				messages = [...messages, { role: "ai", content: data.error }];
+				return;
+			}
 
-        try {
-            const response = await fetch("/api/chat", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    messages,
-                    step: "NAME_SELECTION",
-                    message: brandData.name,
-                    brandData,
-                })
-            });
+			if (type === "names") brandData.nameOptions = data.result;
+			if (type === "moodboards") brandData.moodboards = data.result;
+			if (type === "logos") brandData.logos = data.result;
+			if (type === "guidelines") brandData.guidelines = data.result;
+			if (type === "wireframe") brandData.wireframe = data.result;
+			if (type === "socialCampaigns") brandData.socialCampaigns = data.result;
+			brandData.regenCounts[type] =
+				(brandData.regenCounts[type] || 0) + 1;
+			brandData = brandData;
 
-            if (!response.ok) throw new Error("API request failed");
-            const result = await response.json();
-
-            brandData.moodboards = result.moodboards;
-            brandData.regenCounts.moodboards = 0;
-            step = "MOODBOARD_SELECTION";
-            tick().then(() => canvasRef?.panTo(1800, 0));
-        } catch(err) {
-            console.error(err);
-            error = "Failed to synthesize moodboards. Retry recommended.";
-        } finally {
-            isLoading = false;
-        }
-    }
-
-    async function handleSelectMoodboard(moodboard) {
-        brandData.selectedMoodboard = moodboard;
-        isLoading = true;
-        error = null;
-
-        try {
-             const response = await fetch("/api/chat", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    messages,
-                    step: "MOODBOARD_SELECTION",
-                    brandData,
-                })
-            });
-
-            if (!response.ok) throw new Error("API request failed");
-            const result = await response.json();
-
-            brandData.logos = result.logos;
-            brandData.regenCounts.logos = 0;
-            brandData.guidelines = result.guidelines;
-            brandData.regenCounts.guidelines = 0;
-            brandData.wireframe = result.wireframe;
-            brandData.regenCounts.wireframe = 0;
-            brandData.socialCampaigns = result.socialCampaigns;
-            brandData.regenCounts.socialCampaigns = 0;
-            brandData.brandPackage = result.brandPackage;
-            step = "DONE";
-            tick().then(() => canvasRef?.panTo(2900, 0));
-        } catch(err) {
-            console.error(err);
-            error = "Asset generation sequence failed. Re-initiating may be required.";
-        } finally {
-            isLoading = false;
-        }
-    }
-
-    async function handleRegenerate(type) {
-        isLoading = true;
-        error = null;
-        try {
-            const response = await fetch("/api/regenerate", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    type,
-                    brandDNA: brandData.brandDNA,
-                    brandName: brandData.name,
-                    brandId: brandData.brandId
-                })
-            });
-
-            if (!response.ok) throw new Error("API request failed");
-            const result = await response.json();
-
-            if (type === "names") {
-                 brandData.nameOptions = result.result;
-                 brandData.regenCounts.names = (brandData.regenCounts.names || 0) + 1;
-            } else if (type === "moodboards") {
-                 brandData.moodboards = result.result;
-                 brandData.regenCounts.moodboards = (brandData.regenCounts.moodboards || 0) + 1;
-            } else if (type === "logos") {
-                 brandData.logos = result.result;
-                 brandData.regenCounts.logos = (brandData.regenCounts.logos || 0) + 1;
-                 updateBrandPackage();
-            } else if (type === "guidelines") {
-                 brandData.guidelines = result.result;
-                 brandData.regenCounts.guidelines = (brandData.regenCounts.guidelines || 0) + 1;
-                 updateBrandPackage();
-            } else if (type === "wireframe") {
-                 brandData.wireframe = result.result;
-                 brandData.regenCounts.wireframe = (brandData.regenCounts.wireframe || 0) + 1;
-                 updateBrandPackage();
-            } else if (type === "socialCampaigns") {
-                 brandData.socialCampaigns = result.result;
-                 brandData.regenCounts.socialCampaigns = (brandData.regenCounts.socialCampaigns || 0) + 1;
-                 updateBrandPackage();
-            }
-        } catch(err) {
-             console.error(err);
-             error = `Failed to regenerate ${type}.`;
-        } finally {
-            isLoading = false;
-        }
-    }
-
-    function updateBrandPackage() {
-        brandData.brandPackage = {
-            id: crypto.randomUUID(),
-            timestamp: new Date().toISOString(),
-            brandName: brandData.name,
-            tagline: brandData.tagline,
-            dna: brandData.brandDNA,
-            moodboard: brandData.selectedMoodboard,
-            logos: brandData.logos,
-            guidelines: brandData.guidelines,
-            wireframe: brandData.wireframe,
-            socialCampaigns: brandData.socialCampaigns
-        };
-    }
+			messages = [
+				...messages,
+				{
+					role: "ai",
+					content: `Regenerated ${type}! ${data.remaining} regeneration(s) left.`,
+				},
+			];
+		} catch (e) {
+			console.error("Regen error:", e);
+		} finally {
+			isLoading = false;
+		}
+	}
 </script>
 
-<div class="min-h-screen bg-obsidian text-on-surface font-body overflow-hidden">
-    <!-- Top Navigation -->
-    <TopNav {step} brandName={brandData.name} />
+<svelte:head><title>AI Brand Builder v2.0</title></svelte:head>
 
-    <div class="flex pt-16 h-screen">
-        <!-- Sidebar Navigation (Hidden on IDEA_INPUT or small screens mapped via component) -->
-        <SideNav {step} />
-
-        <!-- Main Content Area -->
-        <main class="flex-1 w-full lg:ml-64 relative">
-            <!-- Background Enhancements -->
-            <div class="fixed top-20 right-0 w-[500px] h-[500px] bg-primary-container/10 rounded-full blur-[120px] pointer-events-none mix-blend-screen opacity-50"></div>
-            <div class="fixed bottom-0 left-64 w-[600px] h-[400px] bg-surface-bright/5 rounded-full blur-[100px] pointer-events-none"></div>
-
-            {#if error}
-                <div class="absolute top-4 left-1/2 -translate-x-1/2 z-50 bg-error-container text-error px-6 py-3 rounded-lg flex items-center gap-3 shadow-2xl border border-error/20 animate-fade-in-down">
-                    <span class="material-symbols-outlined text-sm">warning</span>
-                    <span class="text-[11px] font-bold uppercase tracking-wider">{error}</span>
-                    <button on:click={() => error = null} class="ml-4 hover:opacity-70"><span class="material-symbols-outlined text-sm">close</span></button>
-                </div>
-            {/if}
-
-            {#if !isInfiniteCanvasMode}
-                <!-- Static Ideation View -->
-                <div class="w-full h-full flex items-center justify-center p-6 relative z-10">
-                    <div class="w-full max-w-[600px] h-[750px] bg-surface-container-low/50 backdrop-blur-xl rounded-2xl shadow-2xl overflow-y-auto custom-scrollbar border border-outline-variant/20 relative">
-                        <!-- Node Header to mimic the DraggableNode aesthetic statically -->
-                        <div class="px-6 py-4 border-b border-outline-variant/20 flex items-center justify-between bg-surface-container/80 sticky top-0 z-10">
-                            <h3 class="font-label text-xs uppercase tracking-widest text-primary font-bold">Brainstorm & Strategy</h3>
-                            <span class="material-symbols-outlined text-secondary opacity-50 text-sm">psychology</span>
-                        </div>
-                        <div class="p-6">
-                            <IdeaPanel
-                                {step}
-                                {messages}
-                                {isLoading}
-                                onSendMessage={handleSendMessage}
-                                onInspirationSubmit={handleInspirationSubmit}
-                            />
-                        </div>
-                    </div>
-                </div>
-            {:else}
-                <!-- Infinite Canvas Workspace View -->
-                <InfiniteCanvas bind:this={canvasRef}>
-
-                <!-- Brand DNA & Names Node -->
-                {#if brandData.brandDNA}
-                    <DraggableNode title="Identity Synthesis" x={650} y={0} width="1100px" onExport={() => downloadBrandPackage(brandData.brandPackage, brandData.selectedName)}>
-                        <div class="h-[750px] overflow-y-auto custom-scrollbar bg-surface/50 rounded-b-2xl p-6">
-                            <BrandDNAPanel
-                                {brandData}
-                                {isLoading}
-                                onSelectName={handleSelectName}
-                                onRegenerate={handleRegenerate}
-                            />
-                        </div>
-                    </DraggableNode>
-                {/if}
-
-                <!-- Moodboard Node -->
-                {#if brandData.moodboards}
-                    <DraggableNode title="Visual Direction" x={1800} y={0} width="1050px" onExport={() => {
-                        const mb = brandData.moodboards?.find(m => m.imageUrl);
-                        if (mb) downloadPNG(mb.imageUrl, `${brandData.selectedName || 'brand'}-moodboard.png`);
-                    }}>
-                        <div class="h-[750px] overflow-y-auto custom-scrollbar bg-surface/50 rounded-b-2xl p-6">
-                            <MoodboardPanel
-                                {brandData}
-                                {isLoading}
-                                onSelectMoodboard={handleSelectMoodboard}
-                                onRegenerate={handleRegenerate}
-                            />
-                        </div>
-                    </DraggableNode>
-                {/if}
-
-                <!-- Assets Workspace Node -->
-                {#if brandData.brandPackage}
-                    <DraggableNode title="Brand Assets Studio" x={2900} y={0} width="1200px" onExport={() => downloadAllAsZip(brandData, brandData.selectedName || 'brand')}>
-                        <div class="h-[800px] overflow-y-auto custom-scrollbar bg-surface/50 rounded-b-2xl p-6">
-                            <AssetsWorkspace
-                                {step}
-                                {brandData}
-                                {isLoading}
-                                onRegenerate={handleRegenerate}
-                            />
-                        </div>
-                    </DraggableNode>
-                {/if}
-            </InfiniteCanvas>
-            {/if}
-
-
-        </main>
-    </div>
+<div class="flex w-screen h-screen overflow-hidden bg-bg">
+	<ChatPanel
+		{messages}
+		{step}
+		{isLoading}
+		onSendMessage={handleSendMessage}
+		onInspirationSubmit={handleInspirationSubmit}
+		onSelectName={handleSelectName}
+	/>
+	<PreviewPanel
+		{step}
+		{brandData}
+		onSelectMoodboard={handleSelectMoodboard}
+		onRegenerate={handleRegenerate}
+	/>
+	<AssetsPanel {step} {brandData} onRegenerate={handleRegenerate} />
 </div>
-
-<style>
-    @keyframes fade-in-down {
-        from { opacity: 0; transform: translate(-50%, -20px); }
-        to { opacity: 1; transform: translate(-50%, 0); }
-    }
-    .animate-fade-in-down {
-        animation: fade-in-down 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-</style>
