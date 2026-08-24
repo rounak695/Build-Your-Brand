@@ -27,7 +27,9 @@ import {
   ArrowRight,
   Send,
   Sparkles,
-  Command
+  Command,
+  Sun,
+  Moon
 } from "lucide-react";
 import { useBrain } from "@/lib/brain";
 import { cn, getAgentStatusColor, getAgentStatusLabel } from "@/lib/utils";
@@ -65,6 +67,29 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
   const router = useRouter();
   const projectId = params.id as string;
   const brain = useBrain();
+
+  const [theme, setTheme] = useState<"light" | "dark">("dark");
+
+  useEffect(() => {
+    const savedTheme = (localStorage.getItem("theme") as "light" | "dark") || "dark";
+    setTheme(savedTheme);
+    if (savedTheme === "light") {
+      document.documentElement.classList.add("light");
+    } else {
+      document.documentElement.classList.remove("light");
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = theme === "dark" ? "light" : "dark";
+    setTheme(newTheme);
+    localStorage.setItem("theme", newTheme);
+    if (newTheme === "light") {
+      document.documentElement.classList.add("light");
+    } else {
+      document.documentElement.classList.remove("light");
+    }
+  };
 
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [panelOpen, setPanelOpen] = useState(true);
@@ -178,7 +203,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
               id: Math.random().toString(36).slice(2),
               role: "assistant",
               agentName: "Nova · Chief Executive Agent",
-              content: evt.message
+              content: evt.message || ""
             };
             setChatHistory((prev) => ({
               ...prev,
@@ -334,6 +359,18 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
 
         {/* Right actions */}
         <div className="flex items-center gap-2">
+          <button
+            onClick={toggleTheme}
+            className="w-8 h-8 flex items-center justify-center rounded-lg text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--background)] transition-colors border border-transparent hover:border-[var(--border)]"
+            aria-label="Toggle Theme"
+          >
+            {theme === "dark" ? (
+              <Sun className="w-4 h-4 text-yellow-400" />
+            ) : (
+              <Moon className="w-4 h-4 text-blue-500" />
+            )}
+          </button>
+
           <button
             onClick={() => setCommandPaletteOpen(true)}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-small font-medium text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--background)] transition-colors border border-transparent hover:border-[var(--border)]"

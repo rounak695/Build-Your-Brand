@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, ArrowRight, Code2, LineChart, Briefcase, Boxes, Terminal, Zap, ShieldCheck, ChevronLeft, ChevronRight, Rocket, Presentation, Target, Palette } from "lucide-react";
+import { Sparkles, ArrowRight, Code2, LineChart, Briefcase, Boxes, Terminal, Zap, ShieldCheck, ChevronLeft, ChevronRight, Rocket, Presentation, Target, Palette, Sun, Moon } from "lucide-react";
 import { generateId } from "@/lib/utils";
 import RobotAgent from "@/components/RobotAgent";
 
@@ -541,6 +541,28 @@ export default function LandingPage() {
   const [isTyping, setIsTyping] = useState(false);
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [theme, setTheme] = useState<"light" | "dark">("dark");
+
+  useEffect(() => {
+    const savedTheme = (localStorage.getItem("theme") as "light" | "dark") || "dark";
+    setTheme(savedTheme);
+    if (savedTheme === "light") {
+      document.documentElement.classList.add("light");
+    } else {
+      document.documentElement.classList.remove("light");
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = theme === "dark" ? "light" : "dark";
+    setTheme(newTheme);
+    localStorage.setItem("theme", newTheme);
+    if (newTheme === "light") {
+      document.documentElement.classList.add("light");
+    } else {
+      document.documentElement.classList.remove("light");
+    }
+  };
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -569,29 +591,40 @@ export default function LandingPage() {
       <Meteors number={15} />
 
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-black/40 backdrop-blur-xl">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-[var(--border)] bg-[var(--background)]/75 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2 cursor-pointer" onClick={() => router.push("/")}>
-            <div className="w-8 h-8 rounded bg-white flex items-center justify-center">
-              <Zap className="w-4 h-4 text-black fill-black" />
+            <div className="w-8 h-8 rounded bg-[var(--foreground)] flex items-center justify-center">
+              <Zap className="w-4 h-4 text-[var(--background)] fill-[var(--background)]" />
             </div>
-            <span className="font-bold text-lg tracking-tight text-white">Xcelerate</span>
+            <span className="font-bold text-lg tracking-tight text-[var(--foreground)]">Xcelerate</span>
           </div>
-          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-400">
-            <a href="#features" className="hover:text-white transition-colors">Features</a>
-            <a href="#agents" className="hover:text-white transition-colors">AI Swarm</a>
-            <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
+          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-[var(--muted)]">
+            <a href="#features" className="hover:text-[var(--foreground)] transition-colors">Features</a>
+            <a href="#agents" className="hover:text-[var(--foreground)] transition-colors">AI Swarm</a>
+            <a href="#pricing" className="hover:text-[var(--foreground)] transition-colors">Pricing</a>
           </div>
           <div className="flex items-center gap-4">
             <button
+              onClick={toggleTheme}
+              className="p-2 rounded-full border border-[var(--border)] bg-[var(--surface)] hover:bg-[var(--border)] transition-all text-[var(--muted)] hover:text-[var(--foreground)] flex items-center justify-center shadow-sm"
+              aria-label="Toggle Theme"
+            >
+              {theme === "dark" ? (
+                <Sun className="w-4 h-4 text-yellow-400" />
+              ) : (
+                <Moon className="w-4 h-4 text-blue-500" />
+              )}
+            </button>
+            <button
               onClick={() => router.push("/demo")}
-              className="text-sm font-medium text-zinc-400 hover:text-white transition-colors"
+              className="text-sm font-medium text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
             >
               Live Demo
             </button>
             <button
               onClick={() => inputRef.current?.focus()}
-              className="px-4 py-2 rounded-full text-sm font-bold bg-white text-black hover:bg-zinc-200 transition-colors"
+              className="px-4 py-2 rounded-full text-sm font-bold bg-[var(--foreground)] text-[var(--background)] hover:opacity-90 transition-all shadow-sm"
             >
               Start Building
             </button>

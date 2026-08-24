@@ -26,7 +26,7 @@ const TABS = ["Strategy", "UX", "Website", "Features", "Roadmap"] as const;
 type Tab = typeof TABS[number];
 
 // HTML template generator for Velocity Sneaker brand website
-const getWebsiteHtml = (brand: { name?: string; tagline?: string; colors?: { primary?: string; accent?: string; secondary?: string; background?: string } } | null | undefined) => {
+const getWebsiteHtml = (brand: { name?: string; tagline?: string; positioning?: string; typography?: any; colors?: { primary?: string; accent?: string; secondary?: string; background?: string } } | null | undefined) => {
   const name = brand?.name || "Velocity";
   const tagline = brand?.tagline || "Run your way.";
   const primaryColor = brand?.colors?.primary || "#0B0B0C";
