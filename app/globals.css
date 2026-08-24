@@ -1,0 +1,109 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-inter);
+  --color-background: #000000;
+  --color-foreground: #FFFFFF;
+}
+
+:root {
+  --background: #000000;
+  --foreground: #FFFFFF;
+  --surface: #0A0A0A;
+  --muted: #A1A1AA;
+  --border: rgba(255, 255, 255, 0.1);
+  --accent: #3B82F6;
+  --accent-light: rgba(59, 130, 246, 0.15);
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter, 'Inter', sans-serif);
+  -webkit-font-smoothing: antialiased;
+}
+
+.text-gradient {
+  background: linear-gradient(180deg, #FFFFFF 0%, #A1A1AA 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-accent {
+  background: linear-gradient(135deg, #A855F7 0%, #3B82F6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.bg-dot-pattern {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.glow-bg {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+  top: -300px;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Animations */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes pulse-border {
+  0% { border-color: rgba(255,255,255,0.1); }
+  50% { border-color: rgba(255,255,255,0.3); }
+  100% { border-color: rgba(255,255,255,0.1); }
+}
+
+.animate-pulse-border {
+  animation: pulse-border 2s infinite;
+}
+
+/* Typography Utilities */
+.text-micro { font-size: 0.75rem; line-height: 1rem; }
+.text-small { font-size: 0.875rem; line-height: 1.25rem; }
+.text-body { font-size: 1rem; line-height: 1.5rem; }
+.text-label { font-size: 0.75rem; line-height: 1rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+.text-title { font-size: 1.25rem; line-height: 1.75rem; font-weight: 600; letter-spacing: -0.01em; }
+.text-headline { font-size: 1.5rem; line-height: 2rem; font-weight: 700; letter-spacing: -0.02em; }
+
+@keyframes meteor {
+  0% { transform: rotate(215deg) translateX(0); opacity: 0; }
+  10% { opacity: 1; }
+  70% { opacity: 1; }
+  100% { transform: rotate(215deg) translateX(-1000px); opacity: 0; }
+}
+.animate-meteor-effect {
+  animation: meteor 5s linear infinite;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
