@@ -250,11 +250,11 @@ function BentoCard({ id, title, desc, icon: Icon, span = 1 }: BentoCardProps) {
           // Side Design Layout for wide cards
           <div className="flex flex-col md:flex-row gap-6 items-stretch justify-between h-full">
             <div className="flex-1 flex flex-col justify-center">
-              <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-6 border border-white/10 group-hover:bg-white/10 transition-colors">
-                <Icon className="w-6 h-6 text-white" />
+              <div className="w-12 h-12 rounded-xl bg-[var(--surface)] flex items-center justify-center mb-6 border border-[var(--border)] group-hover:bg-[var(--border)] transition-colors">
+                <Icon className="w-6 h-6 text-[var(--foreground)]" />
               </div>
-              <h3 className="text-2xl font-bold mb-3 tracking-tight">{title}</h3>
-              <p className="text-zinc-400 leading-relaxed text-sm md:text-base">{desc}</p>
+              <h3 className="text-2xl font-bold mb-3 tracking-tight text-[var(--foreground)]">{title}</h3>
+              <p className="text-[var(--muted)] leading-relaxed text-sm md:text-base">{desc}</p>
             </div>
             <div className="flex-1 flex items-center justify-center min-w-[200px] md:max-w-[320px]">
               {renderVisual()}
@@ -264,11 +264,11 @@ function BentoCard({ id, title, desc, icon: Icon, span = 1 }: BentoCardProps) {
           // Top-to-Bottom Layout for narrow cards
           <div className="flex flex-col gap-6 h-full justify-between">
             <div>
-              <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-6 border border-white/10 group-hover:bg-white/10 transition-colors">
-                <Icon className="w-6 h-6 text-white" />
+              <div className="w-12 h-12 rounded-xl bg-[var(--surface)] flex items-center justify-center mb-6 border border-[var(--border)] group-hover:bg-[var(--border)] transition-colors">
+                <Icon className="w-6 h-6 text-[var(--foreground)]" />
               </div>
-              <h3 className="text-2xl font-bold mb-3 tracking-tight">{title}</h3>
-              <p className="text-zinc-400 leading-relaxed text-sm md:text-base">{desc}</p>
+              <h3 className="text-2xl font-bold mb-3 tracking-tight text-[var(--foreground)]">{title}</h3>
+              <p className="text-[var(--muted)] leading-relaxed text-sm md:text-base">{desc}</p>
             </div>
             <div className="mt-4">
               {renderVisual()}
@@ -407,7 +407,7 @@ function SkillCard({ id, title, desc, tag, apps }: SkillCardProps) {
 
   return (
     <div className="flex-none w-[320px] md:w-[380px] flex flex-col gap-4 scroll-snap-align-start group/card cursor-pointer">
-      <div className="bg-[#0A0A0A] border border-white/5 rounded-2xl p-2 h-[220px] flex flex-col relative overflow-hidden transition-all duration-300 group-hover/card:border-white/20 group-hover/card:bg-[#0f0f0f]">
+      <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-2 h-[220px] flex flex-col relative overflow-hidden transition-all duration-300 group-hover/card:border-[var(--border)] hover:opacity-95">
         {/* Top bar simulating browser/app */}
         <div className="flex items-center gap-2 mb-2 p-2">
            <div className="flex gap-1.5">
@@ -415,18 +415,18 @@ function SkillCard({ id, title, desc, tag, apps }: SkillCardProps) {
              <div className="w-2.5 h-2.5 rounded-full bg-white/10"></div>
              <div className="w-2.5 h-2.5 rounded-full bg-white/10"></div>
            </div>
-           <div className="ml-2 px-3 py-1 rounded-full bg-white/5 text-[10px] font-mono text-zinc-400 font-medium group-hover/card:bg-white/10 group-hover/card:text-zinc-200 transition-colors">
+           <div className="ml-2 px-3 py-1 rounded-full bg-[var(--background)] text-[10px] font-mono text-[var(--muted)] font-medium transition-colors">
              {tag}
            </div>
         </div>
         {/* Content area */}
-        <div className="flex-1 bg-black/50 rounded-xl border border-white/5 relative overflow-hidden flex flex-col m-2 mt-0 transition-colors group-hover/card:bg-black/80">
+        <div className="flex-1 bg-[var(--background)] rounded-xl border border-[var(--border)] relative overflow-hidden flex flex-col m-2 mt-0 transition-colors">
             {renderVisual()}
         </div>
       </div>
       <div className="px-1 text-left">
-        <h3 className="text-xl font-bold mb-2 text-white">{title}</h3>
-        <p className="text-zinc-400 text-sm leading-relaxed mb-4">{desc}</p>
+        <h3 className="text-xl font-bold mb-2 text-[var(--foreground)]">{title}</h3>
+        <p className="text-[var(--muted)] text-sm leading-relaxed mb-4">{desc}</p>
         <div className="flex gap-2 items-center">
            {apps.map((app: string, i: number) => (
              <div key={i} className="w-6 h-6 rounded-md bg-white/5 border border-white/10 flex items-center justify-center text-[10px] font-bold text-zinc-400 shadow-sm transition-all group-hover/card:border-white/20 group-hover/card:text-zinc-300">
@@ -451,17 +451,17 @@ function HowItHelpsSection() {
   };
 
   return (
-    <section className="relative z-10 py-24 px-6 max-w-7xl mx-auto border-t border-white/5">
+    <section className="relative z-10 py-24 px-6 max-w-7xl mx-auto border-t border-[var(--border)]">
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
         <div className="max-w-2xl">
-          <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">How Xcelerate can help you</h2>
-          <p className="text-zinc-400 text-lg">Explore specialized capabilities designed to help every founder build, launch, and scale their ideas faster than ever before.</p>
+          <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4 text-[var(--foreground)]">How Xcelerate can help you</h2>
+          <p className="text-[var(--muted)] text-lg">Explore specialized capabilities designed to help every founder build, launch, and scale their ideas faster than ever before.</p>
         </div>
         <div className="flex gap-3">
-          <button onClick={() => scroll('left')} className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/5 transition-all">
+          <button onClick={() => scroll('left')} className="w-10 h-10 rounded-full border border-[var(--border)] bg-[var(--surface)] flex items-center justify-center text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--border)] transition-all">
             <ChevronLeft className="w-5 h-5" />
           </button>
-          <button onClick={() => scroll('right')} className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/5 transition-all">
+          <button onClick={() => scroll('right')} className="w-10 h-10 rounded-full border border-[var(--border)] bg-[var(--surface)] flex items-center justify-center text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--border)] transition-all">
             <ChevronRight className="w-5 h-5" />
           </button>
         </div>
@@ -584,7 +584,7 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white relative overflow-hidden font-sans">
+    <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] relative overflow-hidden font-sans">
       {/* Background Effects */}
       <div className="absolute inset-0 bg-dot-pattern opacity-40 z-0"></div>
       <div className="glow-bg z-0"></div>
@@ -641,7 +641,7 @@ export default function LandingPage() {
           className="w-full flex flex-col items-center"
         >
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 text-xs text-zinc-300 mb-8 backdrop-blur-md shadow-2xl">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[var(--border)] bg-[var(--surface)] text-xs text-[var(--foreground)] mb-8 backdrop-blur-md shadow-2xl">
             <Sparkles className="w-3.5 h-3.5 text-blue-400" />
             <span className="font-medium">Xcelerate Swarm v3.4 is live</span>
             <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse ml-1" />
@@ -677,7 +677,7 @@ export default function LandingPage() {
                 {/* Floating glow behind robot */}
                 <div className="absolute -inset-1 bg-gradient-to-b from-blue-500/10 to-purple-500/10 rounded-full blur-md opacity-0 group-hover:opacity-100 transition duration-500" />
                 <RobotAgent agentId={bot.id} size={90} typing={true} />
-                <span className="text-[10px] font-bold text-zinc-500 mt-2 px-2 py-0.5 rounded-full border border-white/5 bg-white/5 uppercase tracking-wider group-hover:text-white group-hover:border-white/10 transition-colors">
+                <span className="text-[10px] font-bold text-[var(--muted)] mt-2 px-2 py-0.5 rounded-full border border-[var(--border)] bg-[var(--surface)] uppercase tracking-wider group-hover:text-[var(--foreground)] group-hover:border-[var(--border)] transition-colors">
                   {bot.role}
                 </span>
               </motion.div>
@@ -691,7 +691,7 @@ export default function LandingPage() {
           </h1>
 
           {/* Subtitle */}
-          <p className="text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto mb-12 leading-relaxed font-medium">
+          <p className="text-lg md:text-xl text-[var(--muted)] max-w-2xl mx-auto mb-12 leading-relaxed font-medium">
             Xcelerate deploys specialized AI Directors—Product, Engineering, Growth, and Finance—to build your startup in parallel.
           </p>
 
@@ -700,10 +700,10 @@ export default function LandingPage() {
             <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl blur-md opacity-20 group-focus-within:opacity-60 transition duration-1000 group-hover:opacity-60"></div>
             <form
               onSubmit={handleSubmit}
-              className="relative flex items-center bg-[#050505] border border-white/10 rounded-2xl p-2 shadow-2xl transition-all duration-300 hover:border-white/20 focus-within:border-white/30"
+              className="relative flex items-center bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-2 shadow-2xl transition-all duration-300 hover:border-[var(--border)] focus-within:border-[var(--border)]"
             >
               <div className="pl-4 pr-2">
-                <Terminal className="w-5 h-5 text-zinc-400" />
+                <Terminal className="w-5 h-5 text-[var(--muted)]" />
               </div>
               <div className="relative w-full h-14 flex items-center">
                 <input
@@ -716,11 +716,11 @@ export default function LandingPage() {
                   }}
                   onFocus={() => setIsTyping(true)}
                   onBlur={() => setIsTyping(idea.length > 0)}
-                  className="w-full h-full bg-transparent text-white text-lg font-medium outline-none placeholder:text-transparent"
+                  className="w-full h-full bg-transparent text-[var(--foreground)] text-lg font-medium outline-none placeholder:text-transparent"
                   placeholder=""
                 />
                 {!idea && (
-                  <div className="absolute inset-0 flex items-center pointer-events-none text-zinc-500 text-lg font-medium">
+                  <div className="absolute inset-0 flex items-center pointer-events-none text-[var(--muted)] text-lg font-medium opacity-60">
                     <AnimatePresence mode="wait">
                       <motion.span
                         key={placeholderIndex}
@@ -738,7 +738,7 @@ export default function LandingPage() {
               <button
                 type="submit"
                 disabled={!idea.trim() || isSubmitting}
-                className="ml-2 mr-1 px-8 h-12 rounded-xl bg-white text-black font-bold hover:bg-zinc-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center gap-2"
+                className="ml-2 mr-1 px-8 h-12 rounded-xl bg-[var(--foreground)] text-[var(--background)] font-bold hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center gap-2"
               >
                 {isSubmitting ? (
                   <div className="w-4 h-4 border-2 border-black/20 border-t-black rounded-full animate-spin" />
@@ -752,21 +752,21 @@ export default function LandingPage() {
           </div>
 
           {/* Quick links */}
-          <div className="mt-8 flex items-center gap-4 text-sm text-zinc-500 font-medium">
-            <span>Press <kbd className="px-1.5 py-0.5 rounded bg-white/10 text-zinc-300 font-mono text-xs mx-1 border border-white/10">Enter</kbd> to execute</span>
+          <div className="mt-8 flex items-center gap-4 text-sm text-[var(--muted)] font-medium">
+            <span>Press <kbd className="px-1.5 py-0.5 rounded bg-[var(--surface)] text-[var(--foreground)] font-mono text-xs mx-1 border border-[var(--border)]">Enter</kbd> to execute</span>
             <span>•</span>
-            <button onClick={() => { setIdea(PLACEHOLDERS[0]); setIsTyping(true); }} className="hover:text-zinc-300 transition-colors">Try an example</button>
+            <button onClick={() => { setIdea(PLACEHOLDERS[0]); setIsTyping(true); }} className="hover:text-[var(--foreground)] transition-colors">Try an example</button>
           </div>
         </motion.div>
       </main>
 
       {/* Trusted By Banner */}
-      <section className="relative z-10 border-y border-white/5 bg-white/[0.01] py-8 overflow-hidden mb-24">
+      <section className="relative z-10 border-y border-[var(--border)] bg-[var(--surface)] py-8 overflow-hidden mb-24">
         <div className="max-w-7xl mx-auto px-6 flex flex-col items-center">
-          <p className="text-xs uppercase tracking-widest text-zinc-500 font-bold mb-6 flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4" /> Trusted by 10,000+ AI Native Founders
+          <p className="text-xs uppercase tracking-widest text-[var(--muted)] font-bold mb-6 flex items-center gap-2">
+            <ShieldCheck className="w-4 h-4 text-[var(--accent)]" /> Trusted by 10,000+ AI Native Founders
           </p>
-          <div className="flex gap-12 text-zinc-600 font-bold text-xl md:text-2xl filter grayscale opacity-50 justify-center flex-wrap">
+          <div className="flex gap-12 text-[var(--muted)] font-bold text-xl md:text-2xl filter grayscale opacity-60 justify-center flex-wrap">
             <span>Stripe</span>
             <span>Vercel</span>
             <span>Supabase</span>
@@ -782,33 +782,33 @@ export default function LandingPage() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.2 }}
-          className="rounded-2xl border border-white/10 bg-[#050505] shadow-[0_0_100px_-20px_rgba(59,130,246,0.3)] overflow-hidden animate-float"
+          className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] shadow-2xl overflow-hidden animate-float"
         >
           {/* Window Header */}
-          <div className="h-12 border-b border-white/5 flex items-center px-4 gap-2 bg-[#0A0A0A]">
+          <div className="h-12 border-b border-[var(--border)] flex items-center px-4 gap-2 bg-[var(--surface)]">
             <div className="flex gap-1.5">
               <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
               <div className="w-3 h-3 rounded-full bg-yellow-500/80"></div>
               <div className="w-3 h-3 rounded-full bg-green-500/80"></div>
             </div>
-            <div className="mx-auto px-4 py-1.5 rounded-md bg-white/5 text-xs text-zinc-400 font-mono flex items-center gap-2 shadow-inner border border-white/5">
+            <div className="mx-auto px-4 py-1.5 rounded-md bg-[var(--background)] text-xs text-[var(--muted)] font-mono flex items-center gap-2 shadow-inner border border-[var(--border)]">
               <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
               xcelerate-workspace.app
             </div>
           </div>
           {/* Window Body */}
-          <div className="aspect-[16/9] w-full bg-[#000000] p-6 relative overflow-hidden flex flex-col md:flex-row gap-6">
-             <div className="flex-1 border border-white/5 rounded-xl bg-[#0A0A0A] p-5 flex flex-col shadow-inner">
-                <div className="text-xs text-zinc-500 font-mono mb-4 border-b border-white/5 pb-2">Terminal Feed</div>
-                <div className="space-y-4 font-mono text-[11px] text-zinc-400">
+          <div className="aspect-[16/9] w-full bg-[var(--background)] p-6 relative overflow-hidden flex flex-col md:flex-row gap-6">
+             <div className="flex-1 border border-[var(--border)] rounded-xl bg-[var(--surface)] p-5 flex flex-col shadow-inner">
+                <div className="text-xs text-[var(--muted)] font-mono mb-4 border-b border-[var(--border)] pb-2">Terminal Feed</div>
+                <div className="space-y-4 font-mono text-[11px] text-[var(--foreground)]">
                   <div className="flex gap-2"><span className="text-blue-400">[Product]</span> Generating PRD for AI Video Editor...</div>
                   <div className="flex gap-2"><span className="text-green-400">[Engineering]</span> Bootstrapping Next.js 15 repository...</div>
                   <div className="flex gap-2"><span className="text-purple-400">[Growth]</span> Mapping 100-creator outreach pipeline...</div>
                   <div className="flex gap-2"><span className="text-yellow-400">[Finance]</span> Calculating AWS compute unit margins...</div>
                 </div>
              </div>
-             <div className="flex-[2] border border-white/5 rounded-xl bg-[#0A0A0A] p-6 flex flex-col items-center justify-center relative overflow-hidden shadow-inner min-h-[300px]">
-                <div className="absolute top-4 left-4 text-xs font-bold text-zinc-500 uppercase tracking-widest flex items-center gap-1.5">
+             <div className="flex-[2] border border-[var(--border)] rounded-xl bg-[var(--surface)] p-6 flex flex-col items-center justify-center relative overflow-hidden shadow-inner min-h-[300px]">
+                <div className="absolute top-4 left-4 text-xs font-bold text-[var(--muted)] uppercase tracking-widest flex items-center gap-1.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
                   <span>Swarm Live Collaboration</span>
                 </div>
@@ -820,11 +820,11 @@ export default function LandingPage() {
                     { id: "growth", name: "Ari", role: "Growth" },
                     { id: "operations", name: "Noah", role: "Operations" }
                   ].map((bot) => (
-                    <div key={bot.id} className="flex flex-col items-center p-3 rounded-xl border border-white/5 bg-black/40 hover:border-white/10 transition-colors">
+                    <div key={bot.id} className="flex flex-col items-center p-3 rounded-xl border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--surface)] transition-colors">
                       <RobotAgent agentId={bot.id} size={80} typing={true} />
                       <div className="text-center mt-2">
-                        <p className="text-[11px] font-bold text-white leading-none">{bot.name}</p>
-                        <p className="text-[9px] text-zinc-400 mt-1 uppercase tracking-wider">{bot.role}</p>
+                        <p className="text-[11px] font-bold text-[var(--foreground)] leading-none">{bot.name}</p>
+                        <p className="text-[9px] text-[var(--muted)] mt-1 uppercase tracking-wider">{bot.role}</p>
                       </div>
                     </div>
                   ))}
@@ -838,10 +838,10 @@ export default function LandingPage() {
       <HowItHelpsSection />
 
       {/* Feature Bento Grid */}
-      <section id="features" className="relative z-10 py-24 px-6 max-w-6xl mx-auto border-t border-white/5">
+      <section id="features" className="relative z-10 py-24 px-6 max-w-6xl mx-auto border-t border-[var(--border)]">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4 text-gradient">The autonomous architecture.</h2>
-          <p className="text-zinc-400 text-lg font-medium">Built for founders who want to move at the speed of thought.</p>
+          <p className="text-[var(--muted)] text-lg font-medium">Built for founders who want to move at the speed of thought.</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -875,31 +875,31 @@ export default function LandingPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="relative z-10 py-32 px-6 max-w-4xl mx-auto text-center border-t border-white/5">
-         <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">Stop planning. Start building.</h2>
-         <p className="text-zinc-400 text-lg mb-8">Join thousands of founders launching their next big idea with Xcelerate.</p>
+      <section className="relative z-10 py-32 px-6 max-w-4xl mx-auto text-center border-t border-[var(--border)]">
+         <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6 text-[var(--foreground)]">Stop planning. Start building.</h2>
+         <p className="text-[var(--muted)] text-lg mb-8">Join thousands of founders launching their next big idea with Xcelerate.</p>
          <button 
            onClick={() => {
              window.scrollTo({ top: 0, behavior: "smooth" });
              setTimeout(() => inputRef.current?.focus(), 800);
            }}
-           className="px-8 py-4 rounded-full text-lg font-bold bg-white text-black hover:bg-zinc-200 transition-all shadow-[0_0_40px_-10px_rgba(255,255,255,0.5)]"
+           className="px-8 py-4 rounded-full text-lg font-bold bg-[var(--foreground)] text-[var(--background)] hover:opacity-90 transition-all shadow-sm"
          >
            Create your company now
          </button>
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-white/5 py-12 px-6 bg-black">
+      <footer className="border-t border-[var(--border)] py-12 px-6 bg-[var(--background)]">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-2">
-            <Zap className="w-5 h-5 text-white fill-white" />
-            <span className="font-bold tracking-tight">Xcelerate</span>
+            <Zap className="w-5 h-5 text-[var(--foreground)] fill-[var(--foreground)]" />
+            <span className="font-bold tracking-tight text-[var(--foreground)]">Xcelerate</span>
           </div>
-          <div className="flex items-center gap-6 text-sm text-zinc-500 font-medium">
+          <div className="flex items-center gap-6 text-sm text-[var(--muted)] font-medium">
             <span>© {new Date().getFullYear()} Xcelerate Inc.</span>
-            <a href="#" className="hover:text-white transition-colors">Twitter</a>
-            <a href="#" className="hover:text-white transition-colors">GitHub</a>
+            <a href="#" className="hover:text-[var(--foreground)] transition-colors">Twitter</a>
+            <a href="#" className="hover:text-[var(--foreground)] transition-colors">GitHub</a>
           </div>
         </div>
       </footer>
