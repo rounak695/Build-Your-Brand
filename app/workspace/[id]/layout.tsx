@@ -151,7 +151,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
 
     const currentAgent = brain.agents.find((a) => a.id === selectedAgentId) || brain.agents[0];
     const userMsg: AskPanelMessage = {
-      id: Math.random().toString(36).slice(2),
+      id: crypto.randomUUID(),
       role: "user",
       content: messageText.trim()
     };
@@ -172,7 +172,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
     if (selectedAgentId === "ceo" && isGlobalDirective) {
       // Run full team simulation sequence!
       try {
-        await runGlobalSyncSequence(messageText, brain, (evt: any) => {
+        await runGlobalSyncSequence(messageText, brain, (evt: { type: string; agentId?: string; status?: string; message?: string }) => {
           if (evt.type === "agent.progress" || evt.type === "agent.handoff" || evt.type === "project.updated") {
             const systemMsg: AskPanelMessage = {
               id: Math.random().toString(36).slice(2),
@@ -470,7 +470,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
                 {brain.agents.map((a) => (
                   <button
                     key={a.id}
-                    onClick={() => setSelectedAgentId(a.id as any)}
+                    onClick={() => setSelectedAgentId(a.id as "ceo" | "product" | "growth" | "operations")}
                     className={cn(
                       "py-1.5 rounded-lg text-[10px] font-semibold uppercase tracking-wider transition-all",
                       selectedAgentId === a.id

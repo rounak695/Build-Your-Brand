@@ -157,7 +157,9 @@ export function getAgentReply(agentId: string, message: string, brandName: strin
 // The "Magic Moment" global sync sequence
 export async function runGlobalSyncSequence(
   prompt: string, 
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   brain: any,
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   onEvent: (event: any) => void
 ) {
   const idea = brain.project?.idea || "Premium sneaker brand for Gen Z";

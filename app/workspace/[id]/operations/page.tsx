@@ -66,7 +66,7 @@ export default function OperationsPage() {
   // Synchronize local state with store when operations object updates from sync sequence
   useEffect(() => {
     if (operations?.pricing) {
-      setPricing(operations.pricing);
+      setTimeout(() => setPricing(operations.pricing), 0);
     }
   }, [operations]);
 

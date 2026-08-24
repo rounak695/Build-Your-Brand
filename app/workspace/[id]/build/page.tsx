@@ -50,23 +50,6 @@ export default function BuildPage() {
     );
   };
 
-  useEffect(() => {
-    if (hasStarted.current) return;
-    hasStarted.current = true;
-
-    const storedIdea = sessionStorage.getItem("xcelerate_idea");
-    const storedId = sessionStorage.getItem("xcelerate_project_id");
-
-    if (!storedIdea) {
-      // Demo mode — use Velocity data
-      loadDemoMode();
-      return;
-    }
-
-    setIdea(storedIdea);
-    runBuildSequence(storedIdea, storedId || projectId);
-  }, []);
-
   const loadDemoMode = async () => {
     const { DEMO_PROJECT, DEMO_BRAND, DEMO_PRODUCT, DEMO_GROWTH, DEMO_OPERATIONS, DEMO_TASKS, DEMO_DECISIONS, DEMO_ACTIVITY } = await import("@/lib/demo-data");
     
@@ -297,6 +280,27 @@ export default function BuildPage() {
     await sleep(600);
     setIsComplete(true);
   };
+
+  useEffect(() => {
+    if (hasStarted.current) return;
+    hasStarted.current = true;
+
+    const storedIdea = sessionStorage.getItem("xcelerate_idea");
+    const storedId = sessionStorage.getItem("xcelerate_project_id");
+
+    if (!storedIdea) {
+      // Demo mode — use Velocity data
+      setTimeout(() => {
+        loadDemoMode();
+      }, 0);
+      return;
+    }
+
+    setTimeout(() => {
+      setIdea(storedIdea);
+      runBuildSequence(storedIdea, storedId || projectId);
+    }, 0);
+  }, [projectId]);
 
   const doneCount = steps.filter((s) => s.status === "DONE").length;
 
