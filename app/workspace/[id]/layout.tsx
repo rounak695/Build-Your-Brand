@@ -487,9 +487,10 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
               {/* Header */}
               <div className="px-5 py-4 border-b border-[var(--border)] flex items-center justify-between bg-[var(--surface)]">
                 <div>
-                  <h2 className="font-bold text-[var(--foreground)] tracking-tight text-small flex items-center gap-1.5">
+                  <h2 className="font-chat-heading uppercase tracking-widest text-[11px] font-bold text-[var(--foreground)] flex items-center gap-2">
+                    <Sparkles className="w-3.5 h-3.5 text-[var(--accent)]" />
                     AI TEAM
-                    <span className="text-micro bg-[var(--accent-light)] text-[var(--accent)] px-2 py-0.5 rounded-full lowercase tracking-normal font-semibold">
+                    <span className="font-chat-mono text-[9px] bg-[var(--accent-light)] text-[var(--accent)] px-2 py-0.5 rounded-full lowercase tracking-normal font-semibold border border-[var(--accent)]/20">
                       {activeAgentsCount > 0 ? `${activeAgentsCount} working` : "idle"}
                     </span>
                   </h2>
@@ -509,9 +510,9 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
                     key={a.id}
                     onClick={() => setSelectedAgentId(a.id as "ceo" | "product" | "growth" | "operations")}
                     className={cn(
-                      "py-1.5 rounded-lg text-[10px] font-semibold uppercase tracking-wider transition-all",
+                      "py-1.5 rounded-lg font-chat text-[11px] font-semibold uppercase tracking-wider transition-all",
                       selectedAgentId === a.id
-                        ? "bg-[var(--surface)] text-[var(--accent)] shadow-sm border border-[var(--border)]"
+                        ? "bg-[var(--surface)] text-[var(--accent)] shadow-sm border border-[var(--border)] font-bold"
                         : "text-[var(--muted)] hover:text-[var(--foreground)]"
                     )}
                   >
@@ -522,18 +523,18 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
 
               {/* Current Selected Agent Info */}
               <div className="px-4 py-3 bg-[var(--surface)] border-b border-[var(--border)] flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden shrink-0 relative">
+                <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden shrink-0 relative shadow-inner">
                   <RobotAgent agentId={activeAgent.id} size={48} headOnly={true} />
                   {(activeAgent.status === "WORKING" || activeAgent.status === "THINKING" || activeAgent.status === "RESEARCHING") && (
                     <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-[var(--surface)] animate-ping" />
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h4 className="text-small font-semibold text-[var(--foreground)] leading-tight">
+                  <h4 className="font-chat-heading text-[13.5px] font-bold text-[var(--foreground)] leading-tight tracking-tight">
                     {activeAgent.name}
                   </h4>
-                  <p className="text-micro text-[var(--muted)] truncate mt-0.5">
-                    {activeAgent.role} · <span className="lowercase">{getAgentStatusLabel(activeAgent.status)}</span>
+                  <p className="font-chat text-[11px] text-[var(--muted)] truncate mt-0.5">
+                    {activeAgent.role} · <span className="font-chat-mono text-[9px] uppercase tracking-wider">{getAgentStatusLabel(activeAgent.status)}</span>
                   </p>
                 </div>
               </div>
@@ -541,7 +542,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
               {/* Selected Agent Chat History */}
               <div
                 ref={chatContainerRef}
-                className="flex-1 overflow-y-auto p-4 space-y-4 bg-[var(--background)]"
+                className="flex-1 overflow-y-auto p-4 space-y-4 bg-[var(--background)] font-chat"
               >
                 {(chatHistory[selectedAgentId] || []).map((msg) => (
                   <div
@@ -552,16 +553,17 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
                     )}
                   >
                     {msg.role === "assistant" && (
-                      <span className="text-micro font-semibold text-[var(--accent)] px-0.5">
+                      <span className="font-chat text-[11px] font-semibold text-[var(--accent)] px-0.5 tracking-tight flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] inline-block" />
                         {msg.agentName}
                       </span>
                     )}
                     <div
                       className={cn(
-                        "text-small rounded-xl px-3.5 py-2.5 max-w-[85%] leading-relaxed shadow-sm border",
+                        "font-chat-message rounded-2xl px-4 py-3 max-w-[88%] shadow-sm border transition-all",
                         msg.role === "user"
-                          ? "bg-[var(--accent)] text-white border-[var(--accent)] rounded-tr-none"
-                          : "bg-[var(--surface)] text-[var(--foreground)] border-[var(--border)] rounded-tl-none"
+                          ? "bg-[var(--accent)] text-white border-[var(--accent)] rounded-tr-xs font-medium shadow-blue-500/10"
+                          : "bg-[var(--surface)] text-[var(--foreground)] border-[var(--border)] rounded-tl-xs shadow-black/20"
                       )}
                     >
                       {msg.content}
@@ -573,9 +575,9 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
                         {msg.sources.map((src, idx) => (
                           <span
                             key={idx}
-                            className="text-micro text-[var(--muted)] px-2 py-0.5 rounded border border-[var(--border)] bg-[var(--surface)] flex items-center gap-1 cursor-pointer hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors"
+                            className="font-chat-mono text-[10px] text-[var(--muted)] px-2 py-0.5 rounded-md border border-[var(--border)] bg-[var(--surface)] flex items-center gap-1 cursor-pointer hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all shadow-2xs"
                           >
-                            <Sparkles className="w-2.5 h-2.5" />
+                            <Sparkles className="w-2.5 h-2.5 text-[var(--accent)]" />
                             {src}
                           </span>
                         ))}
@@ -585,17 +587,18 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
                 ))}
                 
                 {isAsking && (
-                  <div className="flex flex-col gap-1.5 animate-fade-in items-start">
-                    <span className="text-micro font-semibold text-[var(--accent)] px-0.5">
-                      {activeAgent.name} · typing
+                  <div className="flex flex-col gap-1.5 animate-fade-in items-start font-chat">
+                    <span className="font-chat text-[11px] font-semibold text-[var(--accent)] px-0.5 flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-ping" />
+                      {activeAgent.name} is typing...
                     </span>
-                    <div className="flex items-end gap-3 bg-[var(--surface)] border border-[var(--border)] rounded-xl px-4 py-3 rounded-tl-none shadow-sm max-w-[85%]">
+                    <div className="flex items-end gap-3 bg-[var(--surface)] border border-[var(--border)] rounded-2xl px-4 py-3 rounded-tl-xs shadow-sm max-w-[85%]">
                       <RobotAgent agentId={activeAgent.id} size={50} typing={true} className="shrink-0" />
                       <div className="flex gap-1 pb-1">
                         {[0, 1, 2].map((i) => (
                           <div
                             key={i}
-                            className="w-1.5 h-1.5 rounded-full bg-[var(--muted)]"
+                            className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]"
                             style={{ animation: `pulse-dot 1.4s ease-in-out ${i * 0.2}s infinite` }}
                           />
                         ))}
@@ -606,14 +609,14 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
               </div>
 
               {/* Chat Input & Suggestions */}
-              <div className="border-t border-[var(--border)] p-4 bg-[var(--surface)]">
+              <div className="border-t border-[var(--border)] p-4 bg-[var(--surface)] font-chat">
                 {/* Suggestions chips */}
                 <div className="flex gap-1.5 overflow-x-auto pb-3 -mx-2 px-2 scrollbar-none">
                   {getSuggestedPrompts(selectedAgentId).map((q) => (
                     <button
                       key={q}
                       onClick={() => setAskInput(q)}
-                      className="shrink-0 text-micro px-3 py-1.5 rounded-full bg-[var(--background)] text-[var(--muted)] border border-[var(--border)] hover:border-[var(--accent)] hover:text-[var(--foreground)] transition-colors"
+                      className="shrink-0 font-chat text-[11px] font-medium px-3 py-1.5 rounded-full bg-[var(--background)] text-[var(--muted)] border border-[var(--border)] hover:border-[var(--accent)] hover:text-[var(--foreground)] transition-colors shadow-2xs"
                     >
                       {q}
                     </button>
@@ -632,12 +635,12 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
                     }}
                     rows={2}
                     placeholder={`Ask ${activeAgent.name} anything...`}
-                    className="flex-1 resize-none bg-[var(--background)] border border-[var(--border)] rounded-xl px-3.5 py-2 text-small text-[var(--foreground)] placeholder:text-[var(--muted)] outline-none focus:border-[var(--accent)] transition-colors"
+                    className="flex-1 resize-none bg-[var(--background)] border border-[var(--border)] rounded-xl px-3.5 py-2.5 font-chat text-[13.5px] leading-relaxed text-[var(--foreground)] placeholder:font-chat placeholder:text-[12.5px] placeholder:text-[var(--muted)] outline-none focus:border-[var(--accent)] transition-colors shadow-inner"
                   />
                   <button
                     onClick={() => handleAsk()}
                     disabled={!askInput.trim() || isAsking}
-                    className="w-9 h-9 shrink-0 flex items-center justify-center rounded-xl bg-[var(--accent)] text-white disabled:opacity-40 hover:opacity-90 transition-all active:scale-95 shadow-sm"
+                    className="w-10 h-10 shrink-0 flex items-center justify-center rounded-xl bg-[var(--accent)] text-white disabled:opacity-40 hover:opacity-90 transition-all active:scale-95 shadow-md"
                   >
                     <Send className="w-4 h-4" />
                   </button>

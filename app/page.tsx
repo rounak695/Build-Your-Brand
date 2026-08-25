@@ -43,8 +43,8 @@ function Meteors({ number = 20 }: { number?: number }) {
 }
 
 const CodeVisual = () => (
-  <div className="w-full h-full min-h-[140px] bg-black/60 rounded-xl border border-white/5 p-3.5 font-mono text-[9px] text-zinc-400 overflow-hidden shadow-2xl relative select-none">
-    <div className="flex items-center gap-1.5 mb-2 pb-1 border-b border-white/5">
+  <div className="w-full h-full min-h-[140px] bg-zinc-950 dark:bg-black/60 rounded-xl border border-zinc-800 dark:border-white/5 p-3.5 font-mono text-[9px] text-zinc-400 overflow-hidden shadow-2xl relative select-none">
+    <div className="flex items-center gap-1.5 mb-2 pb-1 border-b border-zinc-800 dark:border-white/5">
       <div className="w-1.5 h-1.5 rounded-full bg-red-500/80"></div>
       <div className="w-1.5 h-1.5 rounded-full bg-yellow-500/80"></div>
       <div className="w-1.5 h-1.5 rounded-full bg-green-500/80"></div>
@@ -68,8 +68,8 @@ const CodeVisual = () => (
 );
 
 const FinanceVisual = () => (
-  <div className="w-full h-24 flex items-end justify-between px-2 pt-6 select-none relative overflow-hidden bg-black/40 border border-white/5 rounded-xl">
-    <div className="absolute inset-0 bg-gradient-to-t from-blue-500/5 to-transparent z-0" />
+  <div className="w-full h-24 flex items-end justify-between px-2 pt-6 select-none relative overflow-hidden bg-white dark:bg-black/40 border border-zinc-200 dark:border-white/5 rounded-xl shadow-sm dark:shadow-none">
+    <div className="absolute inset-0 bg-gradient-to-t from-blue-500/10 dark:from-blue-500/5 to-transparent z-0" />
     <svg className="w-full h-full overflow-visible z-10" viewBox="0 0 100 40">
       <defs>
         <linearGradient id="chart-glow" x1="0" y1="0" x2="0" y2="1">
@@ -87,23 +87,23 @@ const FinanceVisual = () => (
         stroke="#3B82F6"
         strokeWidth="2"
       />
-      <circle cx="40" cy="25" r="1.5" fill="#FFFFFF" />
-      <circle cx="80" cy="12" r="1.5" fill="#FFFFFF" />
+      <circle cx="40" cy="25" r="1.5" fill="#3B82F6" />
+      <circle cx="80" cy="12" r="1.5" fill="#3B82F6" />
       <circle cx="100" cy="2" r="2" fill="#3B82F6" className="animate-pulse" />
     </svg>
   </div>
 );
 
 const SwarmVisual = () => (
-  <div className="w-full h-24 flex items-center justify-center gap-2 relative overflow-hidden select-none bg-black/40 border border-white/5 rounded-xl">
+  <div className="w-full h-24 flex items-center justify-center gap-2 relative overflow-hidden select-none bg-white dark:bg-black/40 border border-zinc-200 dark:border-white/5 rounded-xl shadow-sm dark:shadow-none">
     <div className="absolute inset-0 flex items-center justify-center opacity-25">
       <svg className="w-full h-full overflow-visible" viewBox="0 0 200 80">
-        <path d="M 30,40 L 80,40 M 80,40 L 120,40 M 120,40 L 170,40 M 80,40 L 100,15 L 120,40 M 80,40 L 100,65 L 120,40" stroke="#FFFFFF" strokeWidth="1" strokeDasharray="3 3" />
+        <path d="M 30,40 L 80,40 M 80,40 L 120,40 M 120,40 L 170,40 M 80,40 L 100,15 L 120,40 M 80,40 L 100,65 L 120,40" className="stroke-zinc-400 dark:stroke-white" strokeWidth="1" strokeDasharray="3 3" />
       </svg>
     </div>
     <div className="flex gap-2.5 z-10">
       {["ceo", "product", "growth", "operations"].map((id) => (
-        <div key={id} className="w-7 h-7 rounded bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden">
+        <div key={id} className="w-7 h-7 rounded bg-zinc-100 dark:bg-white/5 border border-zinc-200 dark:border-white/10 flex items-center justify-center overflow-hidden">
           <RobotAgent agentId={id} size={24} headOnly={true} />
         </div>
       ))}
@@ -112,25 +112,25 @@ const SwarmVisual = () => (
 );
 
 const GtmVisual = () => (
-  <div className="w-full h-full min-h-[140px] bg-black/60 rounded-xl border border-white/5 p-4 flex flex-col justify-between shadow-2xl select-none relative overflow-hidden">
+  <div className="w-full h-full min-h-[140px] bg-white dark:bg-black/60 rounded-xl border border-zinc-200 dark:border-white/5 p-4 flex flex-col justify-between shadow-md dark:shadow-2xl select-none relative overflow-hidden">
     <div className="space-y-2">
       <div className="flex justify-between items-center text-[10px]">
-        <span className="text-zinc-500 font-medium">Outreach Funnel</span>
-        <span className="text-green-400 font-bold">+14.2%</span>
+        <span className="text-zinc-600 dark:text-zinc-500 font-medium">Outreach Funnel</span>
+        <span className="text-green-600 dark:text-green-400 font-bold">+14.2%</span>
       </div>
       <div className="space-y-1.5 text-left">
         {[
-          { label: "Target Creators", width: "90%", color: "bg-blue-500/80" },
-          { label: "Sent Sequenced DMs", width: "70%", color: "bg-purple-500/80" },
-          { label: "Acquired Leads", width: "45%", color: "bg-pink-500/80" }
+          { label: "Target Creators", width: "90%", color: "bg-blue-500" },
+          { label: "Sent Sequenced DMs", width: "70%", color: "bg-purple-500" },
+          { label: "Acquired Leads", width: "45%", color: "bg-pink-500" }
         ].map((bar, i) => (
           <div key={i} className="space-y-0.5">
-            <div className="flex justify-between text-[8px] text-zinc-400">
+            <div className="flex justify-between text-[8px] text-zinc-600 dark:text-zinc-400">
               <span>{bar.label}</span>
               <span>{bar.width}</span>
             </div>
-            <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-              <div 
+            <div className="h-1 bg-zinc-100 dark:bg-white/5 rounded-full overflow-hidden">
+              <div
                 className={`h-full ${bar.color} rounded-full`}
                 style={{ width: bar.width }}
               />
@@ -141,7 +141,7 @@ const GtmVisual = () => (
     </div>
     <div className="flex gap-1.5 mt-2">
       {["SEO", "Soc", "Ads"].map((tag) => (
-        <span key={tag} className="text-[8px] font-mono text-zinc-400 px-1.5 py-0.5 rounded border border-white/5 bg-white/5">{tag}</span>
+        <span key={tag} className="text-[8px] font-mono text-zinc-600 dark:text-zinc-400 px-1.5 py-0.5 rounded border border-zinc-200 dark:border-white/5 bg-zinc-100 dark:bg-white/5">{tag}</span>
       ))}
     </div>
   </div>
@@ -187,7 +187,7 @@ function BentoCard({ id, title, desc, icon: Icon, span = 1 }: BentoCardProps) {
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className={`rounded-2xl glass-panel relative overflow-hidden group border border-white/5 transition-all duration-300 ${span === 2 ? 'md:col-span-2' : ''}`}
+      className={`rounded-2xl glass-panel relative overflow-hidden group border border-[var(--border)] transition-all duration-300 ${span === 2 ? 'md:col-span-2' : ''}`}
     >
       <style>{`
         @keyframes border-gradient-move {
@@ -235,15 +235,15 @@ function BentoCard({ id, title, desc, icon: Icon, span = 1 }: BentoCardProps) {
       {/* Moving background gradient */}
       <div className="bento-card-glow" />
 
-      <div 
+      <div
         className="absolute inset-0 z-0 transition-opacity duration-300 pointer-events-none"
         style={{
-          background: isHovered 
-            ? `radial-gradient(400px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(255,255,255,0.06), transparent 40%)` 
+          background: isHovered
+            ? `radial-gradient(400px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(255,255,255,0.06), transparent 40%)`
             : 'transparent'
         }}
       />
-      
+
       {/* Card Content Layout */}
       <div className="relative z-10 p-8 h-full flex flex-col justify-between text-left">
         {span === 2 ? (
@@ -281,19 +281,19 @@ function BentoCard({ id, title, desc, icon: Icon, span = 1 }: BentoCardProps) {
 }
 
 const MvpSkillVisual = () => (
-  <div className="w-full h-full flex flex-col p-4 font-mono text-[9px] text-zinc-500 justify-between select-none bg-black/40">
-    <div className="flex items-center justify-between border-b border-white/5 pb-2">
+  <div className="w-full h-full flex flex-col p-4 font-mono text-[9px] text-zinc-400 justify-between select-none bg-zinc-950 dark:bg-black/40">
+    <div className="flex items-center justify-between border-b border-zinc-800 dark:border-white/5 pb-2">
       <span className="text-[8px] text-blue-400">api/auth/route.ts</span>
       <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
     </div>
     <div className="space-y-1 mt-1 text-left flex-1">
-      <p className="text-zinc-400"><span className="text-purple-400">export async function</span> POST(req: Request) &#123;</p>
-      <p className="pl-3 text-zinc-400">const body = <span className="text-blue-400">await</span> req.json();</p>
-      <p className="pl-3 text-zinc-400">const user = <span className="text-blue-400">await</span> db.user.create(&#123; data: body &#125;);</p>
-      <p className="pl-3 text-zinc-400">return NextResponse.json(&#123; user &#125;);</p>
-      <p className="text-zinc-400">&#125;</p>
+      <p className="text-zinc-300 dark:text-zinc-400"><span className="text-purple-400">export async function</span> POST(req: Request) &#123;</p>
+      <p className="pl-3 text-zinc-300 dark:text-zinc-400">const body = <span className="text-blue-400">await</span> req.json();</p>
+      <p className="pl-3 text-zinc-300 dark:text-zinc-400">const user = <span className="text-blue-400">await</span> db.user.create(&#123; data: body &#125;);</p>
+      <p className="pl-3 text-zinc-300 dark:text-zinc-400">return NextResponse.json(&#123; user &#125;);</p>
+      <p className="text-zinc-300 dark:text-zinc-400">&#125;</p>
     </div>
-    <div className="flex justify-between items-center text-[7px] border-t border-white/5 pt-2">
+    <div className="flex justify-between items-center text-[7px] border-t border-zinc-800 dark:border-white/5 pt-2">
       <span className="text-zinc-500">Database connected</span>
       <span className="text-green-500">✓ Ready</span>
     </div>
@@ -301,81 +301,81 @@ const MvpSkillVisual = () => (
 );
 
 const PitchDeckSkillVisual = () => (
-  <div className="w-full h-full flex flex-col p-4 justify-between bg-zinc-950 select-none relative overflow-hidden text-left">
+  <div className="w-full h-full flex flex-col p-4 justify-between bg-white dark:bg-zinc-950 select-none relative overflow-hidden text-left">
     <div className="absolute top-0 right-0 w-16 h-16 bg-blue-500/10 rounded-full blur-xl" />
     <div className="space-y-1">
-      <span className="text-[8px] font-mono text-zinc-600 tracking-widest uppercase">Slide 04 / Market Size</span>
-      <h4 className="text-xs font-bold text-white tracking-tight leading-tight mt-0.5">Addressing the $12B TAM</h4>
+      <span className="text-[8px] font-mono text-zinc-500 dark:text-zinc-600 tracking-widest uppercase">Slide 04 / Market Size</span>
+      <h4 className="text-xs font-bold text-zinc-900 dark:text-white tracking-tight leading-tight mt-0.5">Addressing the $12B TAM</h4>
     </div>
-    
+
     <div className="grid grid-cols-3 gap-2 mt-2 flex-1 items-end">
       <div className="space-y-1">
-        <div className="h-10 bg-white/5 border border-white/10 rounded flex items-center justify-center text-[9px] font-bold text-zinc-300">SOM</div>
+        <div className="h-10 bg-zinc-100 dark:bg-white/5 border border-zinc-200 dark:border-white/10 rounded flex items-center justify-center text-[9px] font-bold text-zinc-700 dark:text-zinc-300">SOM</div>
         <p className="text-[7px] text-zinc-500 text-center">$1.2B</p>
       </div>
       <div className="space-y-1">
-        <div className="h-14 bg-blue-500/10 border border-blue-500/20 rounded flex items-center justify-center text-[9px] font-bold text-blue-400">SAM</div>
-        <p className="text-[7px] text-blue-400 text-center">$4.5B</p>
+        <div className="h-14 bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 rounded flex items-center justify-center text-[9px] font-bold text-blue-600 dark:text-blue-400">SAM</div>
+        <p className="text-[7px] text-blue-600 dark:text-blue-400 text-center">$4.5B</p>
       </div>
       <div className="space-y-1">
-        <div className="h-16 bg-purple-500/10 border border-purple-500/20 rounded flex items-center justify-center text-[9px] font-bold text-purple-400">TAM</div>
-        <p className="text-[7px] text-purple-400 text-center">$12B</p>
+        <div className="h-16 bg-purple-50 dark:bg-purple-500/10 border border-purple-200 dark:border-purple-500/20 rounded flex items-center justify-center text-[9px] font-bold text-purple-600 dark:text-purple-400">TAM</div>
+        <p className="text-[7px] text-purple-600 dark:text-purple-400 text-center">$12B</p>
       </div>
     </div>
   </div>
 );
 
 const GtmSkillVisual = () => (
-  <div className="w-full h-full flex flex-col p-3 justify-between bg-black/40 select-none relative overflow-hidden text-left">
+  <div className="w-full h-full flex flex-col p-3 justify-between bg-white dark:bg-black/40 select-none relative overflow-hidden text-left">
     <div className="flex items-center gap-2 mb-1.5">
-      <div className="w-5 h-5 rounded-full bg-zinc-800 border border-white/10 flex items-center justify-center text-[9px] font-bold text-white">M</div>
+      <div className="w-5 h-5 rounded-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-white/10 flex items-center justify-center text-[9px] font-bold text-zinc-900 dark:text-white">M</div>
       <div className="flex flex-col">
-        <span className="text-[9px] font-bold text-white leading-tight">maya_growth</span>
+        <span className="text-[9px] font-bold text-zinc-900 dark:text-white leading-tight">maya_growth</span>
         <span className="text-[7px] text-zinc-500">Instagram Reels campaign</span>
       </div>
     </div>
-    
-    <div className="flex-1 bg-zinc-900/60 rounded border border-white/5 p-2 flex flex-col justify-between">
-      <p className="text-[9px] text-zinc-300 font-semibold leading-snug">&ldquo;POV: You build a whole SaaS with one command.&rdquo;</p>
+
+    <div className="flex-1 bg-zinc-100 dark:bg-zinc-900/60 rounded border border-zinc-200 dark:border-white/5 p-2 flex flex-col justify-between">
+      <p className="text-[9px] text-zinc-800 dark:text-zinc-300 font-semibold leading-snug">&ldquo;POV: You build a whole SaaS with one command.&rdquo;</p>
       <div className="flex items-center justify-between text-[7px] text-zinc-500 mt-2">
-        <span>Target Hook: <strong>92% Engagement</strong></span>
-        <span className="text-zinc-400">14k views</span>
+        <span>Target Hook: <strong className="text-zinc-700 dark:text-zinc-300">92% Engagement</strong></span>
+        <span className="text-zinc-500 dark:text-zinc-400">14k views</span>
       </div>
     </div>
-    
+
     <div className="flex justify-between items-center mt-1.5 text-[8px] text-zinc-500">
-      <span>CTR: <strong className="text-green-400">4.8%</strong></span>
-      <span>RoAS: <strong className="text-blue-400">3.5x</strong></span>
+      <span>CTR: <strong className="text-green-600 dark:text-green-400">4.8%</strong></span>
+      <span>RoAS: <strong className="text-blue-600 dark:text-blue-400">3.5x</strong></span>
     </div>
   </div>
 );
 
 const BrandSkillVisual = () => (
-  <div className="w-full h-full flex flex-col p-4 justify-between bg-zinc-950 select-none text-left">
+  <div className="w-full h-full flex flex-col p-4 justify-between bg-white dark:bg-zinc-950 select-none text-left">
     <div className="flex justify-between items-start">
       <div className="space-y-1">
-        <span className="text-[8px] font-mono text-zinc-600 tracking-wider">Style System</span>
-        <h4 className="text-xs font-bold text-white">Aa <span className="font-light text-zinc-400">Outfit Bold</span></h4>
+        <span className="text-[8px] font-mono text-zinc-500 dark:text-zinc-600 tracking-wider">Style System</span>
+        <h4 className="text-xs font-bold text-zinc-900 dark:text-white">Aa <span className="font-light text-zinc-500 dark:text-zinc-400">Outfit Bold</span></h4>
       </div>
       <div className="flex gap-1">
         {["#000000", "#3B82F6", "#A855F7"].map((hex) => (
           <div key={hex} className="flex flex-col items-center gap-0.5">
-            <div className="w-4 h-4 rounded-full border border-white/10" style={{ background: hex }} />
+            <div className="w-4 h-4 rounded-full border border-zinc-200 dark:border-white/10" style={{ background: hex }} />
             <span className="text-[6px] font-mono text-zinc-500">{hex}</span>
           </div>
         ))}
       </div>
     </div>
-    
-    <div className="h-12 border border-dashed border-white/10 rounded flex items-center justify-center relative overflow-hidden bg-black/40">
-      <svg className="w-16 h-16 text-white/10 absolute -rotate-12" viewBox="0 0 100 100">
+
+    <div className="h-12 border border-dashed border-zinc-300 dark:border-white/10 rounded flex items-center justify-center relative overflow-hidden bg-zinc-50 dark:bg-black/40">
+      <svg className="w-16 h-16 text-zinc-200 dark:text-white/10 absolute -rotate-12" viewBox="0 0 100 100">
         <path d="M 50,10 L 90,90 L 10,90 Z" fill="none" stroke="currentColor" strokeWidth="2" />
       </svg>
       <div className="flex items-center gap-1.5 z-10">
-        <div className="w-5 h-5 rounded bg-white flex items-center justify-center">
-          <span className="text-[10px] font-bold text-black">X</span>
+        <div className="w-5 h-5 rounded bg-zinc-900 dark:bg-white flex items-center justify-center">
+          <span className="text-[10px] font-bold text-white dark:text-black">X</span>
         </div>
-        <span className="text-[10px] font-bold text-white tracking-widest uppercase">Xcelerate</span>
+        <span className="text-[10px] font-bold text-zinc-900 dark:text-white tracking-widest uppercase">Xcelerate</span>
       </div>
     </div>
   </div>
@@ -410,29 +410,29 @@ function SkillCard({ id, title, desc, tag, apps }: SkillCardProps) {
       <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-2 h-[220px] flex flex-col relative overflow-hidden transition-all duration-300 group-hover/card:border-[var(--border)] hover:opacity-95">
         {/* Top bar simulating browser/app */}
         <div className="flex items-center gap-2 mb-2 p-2">
-           <div className="flex gap-1.5">
-             <div className="w-2.5 h-2.5 rounded-full bg-white/10"></div>
-             <div className="w-2.5 h-2.5 rounded-full bg-white/10"></div>
-             <div className="w-2.5 h-2.5 rounded-full bg-white/10"></div>
-           </div>
-           <div className="ml-2 px-3 py-1 rounded-full bg-[var(--background)] text-[10px] font-mono text-[var(--muted)] font-medium transition-colors">
-             {tag}
-           </div>
+          <div className="flex gap-1.5">
+            <div className="w-2.5 h-2.5 rounded-full bg-white/10"></div>
+            <div className="w-2.5 h-2.5 rounded-full bg-white/10"></div>
+            <div className="w-2.5 h-2.5 rounded-full bg-white/10"></div>
+          </div>
+          <div className="ml-2 px-3 py-1 rounded-full bg-[var(--background)] text-[10px] font-mono text-[var(--muted)] font-medium transition-colors">
+            {tag}
+          </div>
         </div>
         {/* Content area */}
         <div className="flex-1 bg-[var(--background)] rounded-xl border border-[var(--border)] relative overflow-hidden flex flex-col m-2 mt-0 transition-colors">
-            {renderVisual()}
+          {renderVisual()}
         </div>
       </div>
       <div className="px-1 text-left">
         <h3 className="text-xl font-bold mb-2 text-[var(--foreground)]">{title}</h3>
         <p className="text-[var(--muted)] text-sm leading-relaxed mb-4">{desc}</p>
         <div className="flex gap-2 items-center">
-           {apps.map((app: string, i: number) => (
-             <div key={i} className="w-6 h-6 rounded-md bg-white/5 border border-white/10 flex items-center justify-center text-[10px] font-bold text-zinc-400 shadow-sm transition-all group-hover/card:border-white/20 group-hover/card:text-zinc-300">
-               {app}
-             </div>
-           ))}
+          {apps.map((app: string, i: number) => (
+            <div key={i} className="w-6 h-6 rounded-md bg-white/5 border border-white/10 flex items-center justify-center text-[10px] font-bold text-zinc-400 shadow-sm transition-all group-hover/card:border-white/20 group-hover/card:text-zinc-300">
+              {app}
+            </div>
+          ))}
         </div>
       </div>
     </div>
@@ -467,32 +467,32 @@ function HowItHelpsSection() {
         </div>
       </div>
 
-      <div 
+      <div
         ref={scrollRef}
         className="flex gap-6 overflow-x-auto pb-8 snap-x snap-mandatory hide-scrollbar -mx-6 px-6"
       >
-        <SkillCard 
+        <SkillCard
           id="mvp"
           tag="/build-mvp"
           title="Build an MVP"
           desc="Generate a complete, deployable Next.js application with authentication, database schemas, and API routes in minutes."
           apps={["Nx", "DB", "Api", "Ts"]}
         />
-        <SkillCard 
+        <SkillCard
           id="deck"
           tag="/write-pitch-deck"
           title="Write a Pitch Deck"
           desc="Create a compelling narrative with automated financial projections, market sizing, and competitor analysis."
           apps={["Doc", "Xls", "Pdf"]}
         />
-        <SkillCard 
+        <SkillCard
           id="gtm"
           tag="/launch-campaign"
           title="Launch Go-To-Market"
           desc="Generate targeted SEO content, social media clusters, and personalized outreach sequences for early adopters."
           apps={["SEO", "Soc", "Ads"]}
         />
-        <SkillCard 
+        <SkillCard
           id="brand"
           tag="/design-brand"
           title="Design Brand Identity"
@@ -516,15 +516,15 @@ const containerVariants = {
 };
 
 const robotVariants = {
-  hidden: { 
-    opacity: 0, 
-    scale: 0.3, 
+  hidden: {
+    opacity: 0,
+    scale: 0.3,
     y: 40,
-    filter: "blur(8px)" 
+    filter: "blur(8px)"
   },
-  visible: { 
-    opacity: 1, 
-    scale: 1, 
+  visible: {
+    opacity: 1,
+    scale: 1,
     y: 0,
     filter: "blur(0px)",
     transition: {
@@ -798,38 +798,38 @@ export default function LandingPage() {
           </div>
           {/* Window Body */}
           <div className="aspect-[16/9] w-full bg-[var(--background)] p-6 relative overflow-hidden flex flex-col md:flex-row gap-6">
-             <div className="flex-1 border border-[var(--border)] rounded-xl bg-[var(--surface)] p-5 flex flex-col shadow-inner">
-                <div className="text-xs text-[var(--muted)] font-mono mb-4 border-b border-[var(--border)] pb-2">Terminal Feed</div>
-                <div className="space-y-4 font-mono text-[11px] text-[var(--foreground)]">
-                  <div className="flex gap-2"><span className="text-blue-400">[Product]</span> Generating PRD for AI Video Editor...</div>
-                  <div className="flex gap-2"><span className="text-green-400">[Engineering]</span> Bootstrapping Next.js 15 repository...</div>
-                  <div className="flex gap-2"><span className="text-purple-400">[Growth]</span> Mapping 100-creator outreach pipeline...</div>
-                  <div className="flex gap-2"><span className="text-yellow-400">[Finance]</span> Calculating AWS compute unit margins...</div>
-                </div>
-             </div>
-             <div className="flex-[2] border border-[var(--border)] rounded-xl bg-[var(--surface)] p-6 flex flex-col items-center justify-center relative overflow-hidden shadow-inner min-h-[300px]">
-                <div className="absolute top-4 left-4 text-xs font-bold text-[var(--muted)] uppercase tracking-widest flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                  <span>Swarm Live Collaboration</span>
-                </div>
-                
-                <div className="w-full grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-                  {[
-                    { id: "ceo", name: "Nova", role: "AI CEO" },
-                    { id: "product", name: "Mira", role: "Product" },
-                    { id: "growth", name: "Ari", role: "Growth" },
-                    { id: "operations", name: "Noah", role: "Operations" }
-                  ].map((bot) => (
-                    <div key={bot.id} className="flex flex-col items-center p-3 rounded-xl border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--surface)] transition-colors">
-                      <RobotAgent agentId={bot.id} size={80} typing={true} />
-                      <div className="text-center mt-2">
-                        <p className="text-[11px] font-bold text-[var(--foreground)] leading-none">{bot.name}</p>
-                        <p className="text-[9px] text-[var(--muted)] mt-1 uppercase tracking-wider">{bot.role}</p>
-                      </div>
+            <div className="flex-1 border border-[var(--border)] rounded-xl bg-[var(--surface)] p-5 flex flex-col shadow-inner">
+              <div className="text-xs text-[var(--muted)] font-mono mb-4 border-b border-[var(--border)] pb-2">Terminal Feed</div>
+              <div className="space-y-4 font-mono text-[11px] text-[var(--foreground)]">
+                <div className="flex gap-2"><span className="text-blue-400">[Product]</span> Generating PRD for AI Video Editor...</div>
+                <div className="flex gap-2"><span className="text-green-400">[Engineering]</span> Bootstrapping Next.js 15 repository...</div>
+                <div className="flex gap-2"><span className="text-purple-400">[Growth]</span> Mapping 100-creator outreach pipeline...</div>
+                <div className="flex gap-2"><span className="text-yellow-400">[Finance]</span> Calculating AWS compute unit margins...</div>
+              </div>
+            </div>
+            <div className="flex-[2] border border-[var(--border)] rounded-xl bg-[var(--surface)] p-6 flex flex-col items-center justify-center relative overflow-hidden shadow-inner min-h-[300px]">
+              <div className="absolute top-4 left-4 text-xs font-bold text-[var(--muted)] uppercase tracking-widest flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                <span>Swarm Live Collaboration</span>
+              </div>
+
+              <div className="w-full grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+                {[
+                  { id: "ceo", name: "Nova", role: "AI CEO" },
+                  { id: "product", name: "Mira", role: "Product" },
+                  { id: "growth", name: "Ari", role: "Growth" },
+                  { id: "operations", name: "Noah", role: "Operations" }
+                ].map((bot) => (
+                  <div key={bot.id} className="flex flex-col items-center p-3 rounded-xl border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--surface)] transition-colors">
+                    <RobotAgent agentId={bot.id} size={80} typing={true} />
+                    <div className="text-center mt-2">
+                      <p className="text-[11px] font-bold text-[var(--foreground)] leading-none">{bot.name}</p>
+                      <p className="text-[9px] text-[var(--muted)] mt-1 uppercase tracking-wider">{bot.role}</p>
                     </div>
-                  ))}
-                </div>
-             </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </motion.div>
       </section>
@@ -845,48 +845,48 @@ export default function LandingPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <BentoCard 
+          <BentoCard
             id="code"
-            title="Production Code Generation" 
-            desc="Not just mockups. Xcelerate writes complete Next.js 15 applications with Tailwind CSS, Supabase databases, and fully typed APIs. Ready to deploy to Vercel with one click." 
-            icon={Code2} 
-            span={2} 
+            title="Production Code Generation"
+            desc="Not just mockups. Xcelerate writes complete Next.js 15 applications with Tailwind CSS, Supabase databases, and fully typed APIs. Ready to deploy to Vercel with one click."
+            icon={Code2}
+            span={2}
           />
-          <BentoCard 
+          <BentoCard
             id="finance"
-            title="Financial Modeling" 
-            desc="Instant 5-year unit economics, MRR projections, and cap table generation for your pitch deck." 
-            icon={LineChart} 
+            title="Financial Modeling"
+            desc="Instant 5-year unit economics, MRR projections, and cap table generation for your pitch deck."
+            icon={LineChart}
           />
-          <BentoCard 
+          <BentoCard
             id="swarm"
-            title="Parallel Agents" 
-            desc="4 specialized agents work simultaneously, debating trade-offs and building your startup 4x faster." 
-            icon={Boxes} 
+            title="Parallel Agents"
+            desc="4 specialized agents work simultaneously, debating trade-offs and building your startup 4x faster."
+            icon={Boxes}
           />
-          <BentoCard 
+          <BentoCard
             id="gtm"
-            title="Go-To-Market Automation" 
-            desc="Generate 30-day launch roadmaps, programmatic SEO clusters, and personalized creator outreach DMs instantly." 
-            icon={Briefcase} 
-            span={2} 
+            title="Go-To-Market Automation"
+            desc="Generate 30-day launch roadmaps, programmatic SEO clusters, and personalized creator outreach DMs instantly."
+            icon={Briefcase}
+            span={2}
           />
         </div>
       </section>
 
       {/* CTA Section */}
       <section className="relative z-10 py-32 px-6 max-w-4xl mx-auto text-center border-t border-[var(--border)]">
-         <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6 text-[var(--foreground)]">Stop planning. Start building.</h2>
-         <p className="text-[var(--muted)] text-lg mb-8">Join thousands of founders launching their next big idea with Xcelerate.</p>
-         <button 
-           onClick={() => {
-             window.scrollTo({ top: 0, behavior: "smooth" });
-             setTimeout(() => inputRef.current?.focus(), 800);
-           }}
-           className="px-8 py-4 rounded-full text-lg font-bold bg-[var(--foreground)] text-[var(--background)] hover:opacity-90 transition-all shadow-sm"
-         >
-           Create your company now
-         </button>
+        <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6 text-[var(--foreground)]">Stop planning. Start building.</h2>
+        <p className="text-[var(--muted)] text-lg mb-8">Join thousands of founders launching their next big idea with Xcelerate.</p>
+        <button
+          onClick={() => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            setTimeout(() => inputRef.current?.focus(), 800);
+          }}
+          className="px-8 py-4 rounded-full text-lg font-bold bg-[var(--foreground)] text-[var(--background)] hover:opacity-90 transition-all shadow-sm"
+        >
+          Create your company now
+        </button>
       </section>
 
       {/* Footer */}
