@@ -16,8 +16,8 @@
   --surface: #0A0A0A;
   --muted: #A1A1AA;
   --border: rgba(255, 255, 255, 0.1);
-  --accent: #3B82F6;
-  --accent-light: rgba(59, 130, 246, 0.15);
+  --accent: #27272A;
+  --accent-light: rgba(255, 255, 255, 0.12);
   --dot-color: rgba(255, 255, 255, 0.1);
 }
 
@@ -27,10 +27,11 @@
   --surface: #FFFFFF;
   --muted: #71717A;
   --border: rgba(9, 9, 11, 0.08);
-  --accent: #1D4ED8;
-  --accent-light: rgba(29, 78, 216, 0.1);
+  --accent: #27272A;
+  --accent-light: rgba(39, 39, 42, 0.08);
   --dot-color: rgba(9, 9, 11, 0.06);
 }
+
 
 body {
   background-color: var(--background);

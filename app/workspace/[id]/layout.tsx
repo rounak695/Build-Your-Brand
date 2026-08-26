@@ -35,6 +35,8 @@ import { useBrain } from "@/lib/brain";
 import { cn, getAgentStatusColor, getAgentStatusLabel } from "@/lib/utils";
 import { getSuggestedPrompts, getAgentReply, runGlobalSyncSequence } from "@/lib/services";
 import RobotAgent from "@/components/RobotAgent";
+import XcelerateLogo from "@/components/XcelerateLogo";
+
 
 const NAV_ITEMS = [
   { id: "overview", label: "Overview", icon: LayoutGrid, href: "" },
@@ -302,6 +304,11 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
   // Active agents count
   const activeAgentsCount = brain.agents.filter((a) => a.status === "WORKING" || a.status === "RESEARCHING" || a.status === "THINKING").length;
 
+  // ── DAS1: Chat page gets its own clean layout (no sidebar, no companion) ───
+  if (pathname.endsWith("/chat")) {
+    return <>{children}</>;
+  }
+
   return (
     <div className={cn(
       "h-screen flex flex-col overflow-hidden bg-[var(--background)] relative",
@@ -314,19 +321,28 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
       gridTemplateRows: "56px 1fr",
       transition: "grid-template-columns 0.25s cubic-bezier(0.16,1,0.3,1)"
     }}>
+
       {/* ── Top Bar ── */}
       <header
         className="border-b border-[var(--border)] flex items-center px-5 gap-4 bg-[var(--surface)] z-10"
         style={{ gridColumn: "1 / -1" }}
       >
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 shrink-0">
-          <div className="w-6 h-6 rounded-md bg-[var(--accent)] flex items-center justify-center">
-            <Zap className="w-3.5 h-3.5 text-white" fill="white" />
-          </div>
+        <Link href="/" className="flex items-center gap-2.5 shrink-0">
+          <XcelerateLogo size={24} className="text-[var(--foreground)]" />
           {!sidebarCollapsed && (
-            <span className="text-small font-semibold text-[var(--foreground)] tracking-tight">Xcelerate</span>
+            <span className="text-small font-bold text-[var(--foreground)] tracking-tight">Xcelerate</span>
           )}
+        </Link>
+
+
+        {/* Back to Chat */}
+        <Link
+          href={`/workspace/${projectId}/chat`}
+          className="flex items-center gap-1.5 text-xs font-medium text-[var(--muted)] hover:text-[var(--foreground)] transition-colors shrink-0"
+        >
+          <ChevronLeft className="w-3.5 h-3.5" />
+          Chat
         </Link>
 
         <div className="w-px h-5 bg-[var(--border)]" />
@@ -382,15 +398,15 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
           
           <button className="w-8 h-8 flex items-center justify-center rounded-lg text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--background)] transition-colors relative border border-transparent hover:border-[var(--border)]">
             <Bell className="w-4 h-4" />
-            <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-[var(--accent)] rounded-full" />
+            <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-zinc-800 dark:bg-zinc-200 rounded-full" />
           </button>
 
           <button
             onClick={() => setPanelOpen(!panelOpen)}
             className={cn(
-              "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-small font-semibold transition-colors border",
+              "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-small font-semibold transition-colors border shadow-xs",
               panelOpen
-                ? "bg-[var(--accent)] text-white border-[var(--accent)]"
+                ? "bg-zinc-900 dark:bg-zinc-100 text-white dark:text-black border-zinc-900 dark:border-zinc-100 font-bold"
                 : "bg-[var(--surface)] text-[var(--foreground)] border-[var(--border)] hover:bg-[var(--background)]"
             )}
           >
@@ -399,6 +415,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
           </button>
         </div>
       </header>
+
 
       {/* ── Left Sidebar ── */}
       <aside className="border-r border-[var(--border)] flex flex-col bg-[var(--surface)] overflow-hidden z-10">
@@ -488,9 +505,9 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
               <div className="px-5 py-4 border-b border-[var(--border)] flex items-center justify-between bg-[var(--surface)]">
                 <div>
                   <h2 className="font-chat-heading uppercase tracking-widest text-[11px] font-bold text-[var(--foreground)] flex items-center gap-2">
-                    <Sparkles className="w-3.5 h-3.5 text-[var(--accent)]" />
+                    <Sparkles className="w-3.5 h-3.5 text-zinc-700 dark:text-zinc-300" />
                     AI TEAM
-                    <span className="font-chat-mono text-[9px] bg-[var(--accent-light)] text-[var(--accent)] px-2 py-0.5 rounded-full lowercase tracking-normal font-semibold border border-[var(--accent)]/20">
+                    <span className="font-chat-mono text-[9px] bg-zinc-100 dark:bg-zinc-800/80 text-zinc-800 dark:text-zinc-200 px-2 py-0.5 rounded-full lowercase tracking-normal font-semibold border border-zinc-200 dark:border-zinc-700">
                       {activeAgentsCount > 0 ? `${activeAgentsCount} working` : "idle"}
                     </span>
                   </h2>
@@ -512,7 +529,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
                     className={cn(
                       "py-1.5 rounded-lg font-chat text-[11px] font-semibold uppercase tracking-wider transition-all",
                       selectedAgentId === a.id
-                        ? "bg-[var(--surface)] text-[var(--accent)] shadow-sm border border-[var(--border)] font-bold"
+                        ? "bg-[var(--surface)] text-[var(--foreground)] shadow-xs border border-[var(--border)] font-bold"
                         : "text-[var(--muted)] hover:text-[var(--foreground)]"
                     )}
                   >
@@ -553,21 +570,22 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
                     )}
                   >
                     {msg.role === "assistant" && (
-                      <span className="font-chat text-[11px] font-semibold text-[var(--accent)] px-0.5 tracking-tight flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] inline-block" />
+                      <span className="font-chat text-[11px] font-semibold text-zinc-700 dark:text-zinc-300 px-0.5 tracking-tight flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-zinc-700 dark:bg-zinc-300 inline-block" />
                         {msg.agentName}
                       </span>
                     )}
                     <div
                       className={cn(
-                        "font-chat-message rounded-2xl px-4 py-3 max-w-[88%] shadow-sm border transition-all",
+                        "font-chat-message rounded-2xl px-4 py-3 max-w-[88%] shadow-xs border transition-all",
                         msg.role === "user"
-                          ? "bg-[var(--accent)] text-white border-[var(--accent)] rounded-tr-xs font-medium shadow-blue-500/10"
+                          ? "bg-zinc-900 dark:bg-zinc-100 text-white dark:text-black border-zinc-900 dark:border-zinc-100 rounded-tr-xs font-medium"
                           : "bg-[var(--surface)] text-[var(--foreground)] border-[var(--border)] rounded-tl-xs shadow-black/20"
                       )}
                     >
                       {msg.content}
                     </div>
+
 
                     {/* Source citation list */}
                     {msg.role === "assistant" && msg.sources && msg.sources.length > 0 && (

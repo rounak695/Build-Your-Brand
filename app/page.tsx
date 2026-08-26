@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, ArrowRight, Code2, LineChart, Briefcase, Boxes, Terminal, Zap, ShieldCheck, ChevronLeft, ChevronRight, Rocket, Presentation, Target, Palette, Sun, Moon } from "lucide-react";
 import { generateId } from "@/lib/utils";
 import RobotAgent from "@/components/RobotAgent";
+import XcelerateLogo from "@/components/XcelerateLogo";
 
 const PLACEHOLDERS = [
   "Build an AI video repurposing platform for creators...",
@@ -43,7 +44,8 @@ function Meteors({ number = 20 }: { number?: number }) {
 }
 
 const CodeVisual = () => (
-  <div className="w-full h-full min-h-[140px] bg-zinc-950 dark:bg-black/60 rounded-xl border border-zinc-800 dark:border-white/5 p-3.5 font-mono text-[9px] text-zinc-400 overflow-hidden shadow-2xl relative select-none">
+  <div className="w-full h-full min-h-[140px] bg-zinc-950 dark:bg-black/60 rounded-xl border border-zinc-800 dark:border-white/5 p-3.5 font-mono text-[9px] text-zinc-400 overflow-hidden relative select-none">
+
     <div className="flex items-center gap-1.5 mb-2 pb-1 border-b border-zinc-800 dark:border-white/5">
       <div className="w-1.5 h-1.5 rounded-full bg-red-500/80"></div>
       <div className="w-1.5 h-1.5 rounded-full bg-yellow-500/80"></div>
@@ -112,7 +114,8 @@ const SwarmVisual = () => (
 );
 
 const GtmVisual = () => (
-  <div className="w-full h-full min-h-[140px] bg-white dark:bg-black/60 rounded-xl border border-zinc-200 dark:border-white/5 p-4 flex flex-col justify-between shadow-md dark:shadow-2xl select-none relative overflow-hidden">
+  <div className="w-full h-full min-h-[140px] bg-white dark:bg-black/60 rounded-xl border border-zinc-200 dark:border-white/5 p-4 flex flex-col justify-between select-none relative overflow-hidden">
+
     <div className="space-y-2">
       <div className="flex justify-between items-center text-[10px]">
         <span className="text-zinc-600 dark:text-zinc-500 font-medium">Outreach Funnel</span>
@@ -147,138 +150,8 @@ const GtmVisual = () => (
   </div>
 );
 
-interface BentoCardProps {
-  id: string;
-  title: string;
-  desc: string;
-  icon: React.ElementType;
-  span?: number;
-}
 
-function BentoCard({ id, title, desc, icon: Icon, span = 1 }: BentoCardProps) {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [isHovered, setIsHovered] = useState(false);
-  const cardRef = useRef<HTMLDivElement>(null);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    setMousePosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-  };
-
-  const renderVisual = () => {
-    switch (id) {
-      case "code":
-        return <CodeVisual />;
-      case "finance":
-        return <FinanceVisual />;
-      case "swarm":
-        return <SwarmVisual />;
-      case "gtm":
-        return <GtmVisual />;
-      default:
-        return null;
-    }
-  };
-
-  return (
-    <div
-      ref={cardRef}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      className={`rounded-2xl glass-panel relative overflow-hidden group border border-[var(--border)] transition-all duration-300 ${span === 2 ? 'md:col-span-2' : ''}`}
-    >
-      <style>{`
-        @keyframes border-gradient-move {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-        .bento-card-glow {
-          position: absolute;
-          inset: 0;
-          z-index: 0;
-          opacity: 0;
-          transition: opacity 0.4s ease;
-          background: linear-gradient(135deg, rgba(59,130,246,0.08) 0%, rgba(168,85,247,0.08) 50%, rgba(236,72,153,0.08) 100%);
-          background-size: 200% 200%;
-          animation: border-gradient-move 6s ease infinite;
-        }
-        .group:hover .bento-card-glow {
-          opacity: 1;
-        }
-        .bento-card-border {
-          position: absolute;
-          inset: 0;
-          border-radius: 1rem;
-          padding: 1px;
-          background: transparent;
-          transition: background 0.3s ease;
-          pointer-events: none;
-          z-index: 1;
-          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-          mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-          -webkit-mask-composite: xor;
-          mask-composite: exclude;
-        }
-        .group:hover .bento-card-border {
-          background: linear-gradient(135deg, #3B82F6, #A855F7, #EC4899);
-          background-size: 200% 200%;
-          animation: border-gradient-move 4s linear infinite;
-        }
-      `}</style>
-
-      {/* Moving border gradient */}
-      <div className="bento-card-border" />
-
-      {/* Moving background gradient */}
-      <div className="bento-card-glow" />
-
-      <div
-        className="absolute inset-0 z-0 transition-opacity duration-300 pointer-events-none"
-        style={{
-          background: isHovered
-            ? `radial-gradient(400px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(255,255,255,0.06), transparent 40%)`
-            : 'transparent'
-        }}
-      />
-
-      {/* Card Content Layout */}
-      <div className="relative z-10 p-8 h-full flex flex-col justify-between text-left">
-        {span === 2 ? (
-          // Side Design Layout for wide cards
-          <div className="flex flex-col md:flex-row gap-6 items-stretch justify-between h-full">
-            <div className="flex-1 flex flex-col justify-center">
-              <div className="w-12 h-12 rounded-xl bg-[var(--surface)] flex items-center justify-center mb-6 border border-[var(--border)] group-hover:bg-[var(--border)] transition-colors">
-                <Icon className="w-6 h-6 text-[var(--foreground)]" />
-              </div>
-              <h3 className="text-2xl font-bold mb-3 tracking-tight text-[var(--foreground)]">{title}</h3>
-              <p className="text-[var(--muted)] leading-relaxed text-sm md:text-base">{desc}</p>
-            </div>
-            <div className="flex-1 flex items-center justify-center min-w-[200px] md:max-w-[320px]">
-              {renderVisual()}
-            </div>
-          </div>
-        ) : (
-          // Top-to-Bottom Layout for narrow cards
-          <div className="flex flex-col gap-6 h-full justify-between">
-            <div>
-              <div className="w-12 h-12 rounded-xl bg-[var(--surface)] flex items-center justify-center mb-6 border border-[var(--border)] group-hover:bg-[var(--border)] transition-colors">
-                <Icon className="w-6 h-6 text-[var(--foreground)]" />
-              </div>
-              <h3 className="text-2xl font-bold mb-3 tracking-tight text-[var(--foreground)]">{title}</h3>
-              <p className="text-[var(--muted)] leading-relaxed text-sm md:text-base">{desc}</p>
-            </div>
-            <div className="mt-4">
-              {renderVisual()}
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
 
 const MvpSkillVisual = () => (
   <div className="w-full h-full flex flex-col p-4 font-mono text-[9px] text-zinc-400 justify-between select-none bg-zinc-950 dark:bg-black/40">
@@ -371,138 +244,108 @@ const BrandSkillVisual = () => (
       <svg className="w-16 h-16 text-zinc-200 dark:text-white/10 absolute -rotate-12" viewBox="0 0 100 100">
         <path d="M 50,10 L 90,90 L 10,90 Z" fill="none" stroke="currentColor" strokeWidth="2" />
       </svg>
-      <div className="flex items-center gap-1.5 z-10">
-        <div className="w-5 h-5 rounded bg-zinc-900 dark:bg-white flex items-center justify-center">
-          <span className="text-[10px] font-bold text-white dark:text-black">X</span>
-        </div>
+      <div className="flex items-center gap-2 z-10">
+        <XcelerateLogo size={22} className="text-zinc-900 dark:text-white" />
         <span className="text-[10px] font-bold text-zinc-900 dark:text-white tracking-widest uppercase">Xcelerate</span>
       </div>
     </div>
   </div>
+
 );
 
-interface SkillCardProps {
-  id: string;
-  title: string;
-  desc: string;
-  tag: string;
-  apps: string[];
-}
-
-function SkillCard({ id, title, desc, tag, apps }: SkillCardProps) {
-  const renderVisual = () => {
-    switch (id) {
-      case "mvp":
-        return <MvpSkillVisual />;
-      case "deck":
-        return <PitchDeckSkillVisual />;
-      case "gtm":
-        return <GtmSkillVisual />;
-      case "brand":
-        return <BrandSkillVisual />;
-      default:
-        return null;
-    }
-  };
-
-  return (
-    <div className="flex-none w-[320px] md:w-[380px] flex flex-col gap-4 scroll-snap-align-start group/card cursor-pointer">
-      <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-2 h-[220px] flex flex-col relative overflow-hidden transition-all duration-300 group-hover/card:border-[var(--border)] hover:opacity-95">
-        {/* Top bar simulating browser/app */}
-        <div className="flex items-center gap-2 mb-2 p-2">
-          <div className="flex gap-1.5">
-            <div className="w-2.5 h-2.5 rounded-full bg-white/10"></div>
-            <div className="w-2.5 h-2.5 rounded-full bg-white/10"></div>
-            <div className="w-2.5 h-2.5 rounded-full bg-white/10"></div>
-          </div>
-          <div className="ml-2 px-3 py-1 rounded-full bg-[var(--background)] text-[10px] font-mono text-[var(--muted)] font-medium transition-colors">
-            {tag}
-          </div>
-        </div>
-        {/* Content area */}
-        <div className="flex-1 bg-[var(--background)] rounded-xl border border-[var(--border)] relative overflow-hidden flex flex-col m-2 mt-0 transition-colors">
-          {renderVisual()}
-        </div>
-      </div>
-      <div className="px-1 text-left">
-        <h3 className="text-xl font-bold mb-2 text-[var(--foreground)]">{title}</h3>
-        <p className="text-[var(--muted)] text-sm leading-relaxed mb-4">{desc}</p>
-        <div className="flex gap-2 items-center">
-          {apps.map((app: string, i: number) => (
-            <div key={i} className="w-6 h-6 rounded-md bg-white/5 border border-white/10 flex items-center justify-center text-[10px] font-bold text-zinc-400 shadow-sm transition-all group-hover/card:border-white/20 group-hover/card:text-zinc-300">
-              {app}
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function HowItHelpsSection() {
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  const scroll = (direction: 'left' | 'right') => {
-    if (scrollRef.current) {
-      const { current } = scrollRef;
-      const scrollAmount = direction === 'left' ? -400 : 400;
-      current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+  const SKILLS = [
+    {
+      id: "mvp",
+      tag: "/build-mvp",
+      title: "Build an MVP",
+      desc: "Generate a complete, deployable Next.js application with authentication, database schemas, and API routes in minutes.",
+      apps: ["Nx", "DB", "Api", "Ts"],
+      visual: <MvpSkillVisual />
+    },
+    {
+      id: "deck",
+      tag: "/write-pitch-deck",
+      title: "Write a Pitch Deck",
+      desc: "Create a compelling narrative with automated financial projections, market sizing, and competitor analysis.",
+      apps: ["Doc", "Xls", "Pdf"],
+      visual: <PitchDeckSkillVisual />
+    },
+    {
+      id: "gtm",
+      tag: "/launch-campaign",
+      title: "Launch Go-To-Market",
+      desc: "Generate targeted SEO content, social media clusters, and personalized outreach sequences for early adopters.",
+      apps: ["SEO", "Soc", "Ads"],
+      visual: <GtmSkillVisual />
+    },
+    {
+      id: "brand",
+      tag: "/design-brand",
+      title: "Design Brand Identity",
+      desc: "Create logos, color palettes, typography systems, and brand guidelines that feel premium and modern.",
+      apps: ["Fig", "Svg", "Css"],
+      visual: <BrandSkillVisual />
     }
-  };
+  ];
 
   return (
-    <section className="relative z-10 py-24 px-6 max-w-7xl mx-auto border-t border-[var(--border)]">
-      <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
-        <div className="max-w-2xl">
-          <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4 text-[var(--foreground)]">How Xcelerate can help you</h2>
-          <p className="text-[var(--muted)] text-lg">Explore specialized capabilities designed to help every founder build, launch, and scale their ideas faster than ever before.</p>
-        </div>
-        <div className="flex gap-3">
-          <button onClick={() => scroll('left')} className="w-10 h-10 rounded-full border border-[var(--border)] bg-[var(--surface)] flex items-center justify-center text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--border)] transition-all">
-            <ChevronLeft className="w-5 h-5" />
-          </button>
-          <button onClick={() => scroll('right')} className="w-10 h-10 rounded-full border border-[var(--border)] bg-[var(--surface)] flex items-center justify-center text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--border)] transition-all">
-            <ChevronRight className="w-5 h-5" />
-          </button>
-        </div>
+    <section className="relative z-10 py-24 px-4 md:px-6 max-w-7xl mx-auto border-t border-[var(--border)]">
+      <div className="text-center mb-16">
+        <span className="text-xs font-mono uppercase tracking-widest text-[var(--muted)] font-bold mb-3 block">
+          Specialized Workflows
+        </span>
+        <h2 className="text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-4 text-gradient">
+          How Xcelerate can help you.
+        </h2>
+        <p className="text-[var(--muted)] text-lg md:text-xl font-medium max-w-2xl mx-auto">
+          Explore specialized capabilities designed to help every founder build, launch, and scale their ideas faster than ever before.
+        </p>
       </div>
 
-      <div
-        ref={scrollRef}
-        className="flex gap-6 overflow-x-auto pb-8 snap-x snap-mandatory hide-scrollbar -mx-6 px-6"
-      >
-        <SkillCard
-          id="mvp"
-          tag="/build-mvp"
-          title="Build an MVP"
-          desc="Generate a complete, deployable Next.js application with authentication, database schemas, and API routes in minutes."
-          apps={["Nx", "DB", "Api", "Ts"]}
-        />
-        <SkillCard
-          id="deck"
-          tag="/write-pitch-deck"
-          title="Write a Pitch Deck"
-          desc="Create a compelling narrative with automated financial projections, market sizing, and competitor analysis."
-          apps={["Doc", "Xls", "Pdf"]}
-        />
-        <SkillCard
-          id="gtm"
-          tag="/launch-campaign"
-          title="Launch Go-To-Market"
-          desc="Generate targeted SEO content, social media clusters, and personalized outreach sequences for early adopters."
-          apps={["SEO", "Soc", "Ads"]}
-        />
-        <SkillCard
-          id="brand"
-          tag="/design-brand"
-          title="Design Brand Identity"
-          desc="Create logos, color palettes, typography systems, and brand guidelines that feel premium and modern."
-          apps={["Fig", "Svg", "Css"]}
-        />
+      {/* ONE Unified Continuous Grid Canvas for Capabilities */}
+      <div className="w-full border border-[var(--border)] rounded-2xl md:rounded-3xl overflow-hidden bg-[var(--surface)] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-[var(--border)] relative">
+
+        {SKILLS.map((skill) => (
+          <div key={skill.id} className="p-6 md:p-8 flex flex-col justify-between group hover:bg-[var(--background)]/50 transition-colors duration-300">
+            <div>
+              {/* Tag Header */}
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--background)] border border-[var(--border)] text-[10px] font-mono font-medium text-[var(--muted)] mb-6">
+                <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]" />
+                {skill.tag}
+              </div>
+
+              {/* Title & Desc */}
+              <h3 className="text-xl font-bold mb-3 tracking-tight text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors">
+                {skill.title}
+              </h3>
+              <p className="text-[var(--muted)] text-sm leading-relaxed mb-6 font-medium">
+                {skill.desc}
+              </p>
+            </div>
+
+            {/* Embedded Visual Module */}
+            <div className="space-y-4 mt-2">
+              <div className="w-full h-44 rounded-xl border border-[var(--border)] overflow-hidden bg-[var(--background)]">
+                {skill.visual}
+              </div>
+
+              {/* Tech Apps Pill List */}
+              <div className="flex gap-1.5 items-center">
+                {skill.apps.map((app) => (
+                  <div key={app} className="px-2.5 py-1 rounded-md bg-[var(--background)] border border-[var(--border)] text-[10px] font-mono font-bold text-[var(--muted)]">
+                    {app}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
     </section>
   );
 }
+
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -580,7 +423,7 @@ export default function LandingPage() {
     const id = generateId();
     sessionStorage.setItem("xcelerate_idea", idea.trim());
     sessionStorage.setItem("xcelerate_project_id", id);
-    router.push(`/workspace/${id}/build`);
+    router.push(`/workspace/${id}/chat`);
   };
 
   return (
@@ -593,12 +436,11 @@ export default function LandingPage() {
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-[var(--border)] bg-[var(--background)]/75 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2 cursor-pointer" onClick={() => router.push("/")}>
-            <div className="w-8 h-8 rounded bg-[var(--foreground)] flex items-center justify-center">
-              <Zap className="w-4 h-4 text-[var(--background)] fill-[var(--background)]" />
-            </div>
-            <span className="font-bold text-lg tracking-tight text-[var(--foreground)]">Xcelerate</span>
+          <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => router.push("/")}>
+            <XcelerateLogo size={28} className="text-[var(--foreground)]" />
+            <span className="font-extrabold text-xl tracking-tight text-[var(--foreground)]">Xcelerate</span>
           </div>
+
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-[var(--muted)]">
             <a href="#features" className="hover:text-[var(--foreground)] transition-colors">Features</a>
             <a href="#agents" className="hover:text-[var(--foreground)] transition-colors">AI Swarm</a>
@@ -641,11 +483,12 @@ export default function LandingPage() {
           className="w-full flex flex-col items-center"
         >
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[var(--border)] bg-[var(--surface)] text-xs text-[var(--foreground)] mb-8 backdrop-blur-md shadow-2xl">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[var(--border)] bg-[var(--surface)] text-xs text-[var(--foreground)] mb-8 backdrop-blur-md">
             <Sparkles className="w-3.5 h-3.5 text-blue-400" />
             <span className="font-medium">Xcelerate Swarm v3.4 is live</span>
             <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse ml-1" />
           </div>
+
 
           {/* Swarm Cinematic Lineup */}
           <motion.div
@@ -700,8 +543,9 @@ export default function LandingPage() {
             <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl blur-md opacity-20 group-focus-within:opacity-60 transition duration-1000 group-hover:opacity-60"></div>
             <form
               onSubmit={handleSubmit}
-              className="relative flex items-center bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-2 shadow-2xl transition-all duration-300 hover:border-[var(--border)] focus-within:border-[var(--border)]"
+              className="relative flex items-center bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-2 transition-all duration-300 hover:border-[var(--border)] focus-within:border-[var(--border)]"
             >
+
               <div className="pl-4 pr-2">
                 <Terminal className="w-5 h-5 text-[var(--muted)]" />
               </div>
@@ -782,7 +626,8 @@ export default function LandingPage() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.2 }}
-          className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] shadow-2xl overflow-hidden animate-float"
+          className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] overflow-hidden animate-float"
+
         >
           {/* Window Header */}
           <div className="h-12 border-b border-[var(--border)] flex items-center px-4 gap-2 bg-[var(--surface)]">
@@ -837,42 +682,109 @@ export default function LandingPage() {
       {/* How It Helps Section */}
       <HowItHelpsSection />
 
-      {/* Feature Bento Grid */}
-      <section id="features" className="relative z-10 py-24 px-6 max-w-6xl mx-auto border-t border-[var(--border)]">
+      {/* Feature Section: GitHub-Style Editorial Unified Grid */}
+      <section id="features" className="relative z-10 py-24 px-4 md:px-6 max-w-7xl mx-auto border-t border-[var(--border)]">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4 text-gradient">The autonomous architecture.</h2>
-          <p className="text-[var(--muted)] text-lg font-medium">Built for founders who want to move at the speed of thought.</p>
+          <span className="text-xs font-mono uppercase tracking-widest text-[var(--muted)] font-bold mb-3 block">
+            AI Infrastructure
+          </span>
+          <h2 className="text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-4 text-gradient">
+            The autonomous architecture.
+          </h2>
+          <p className="text-[var(--muted)] text-lg md:text-xl font-medium max-w-2xl mx-auto">
+            Built for founders who want to move at the speed of thought.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <BentoCard
-            id="code"
-            title="Production Code Generation"
-            desc="Not just mockups. Xcelerate writes complete Next.js 15 applications with Tailwind CSS, Supabase databases, and fully typed APIs. Ready to deploy to Vercel with one click."
-            icon={Code2}
-            span={2}
-          />
-          <BentoCard
-            id="finance"
-            title="Financial Modeling"
-            desc="Instant 5-year unit economics, MRR projections, and cap table generation for your pitch deck."
-            icon={LineChart}
-          />
-          <BentoCard
-            id="swarm"
-            title="Parallel Agents"
-            desc="4 specialized agents work simultaneously, debating trade-offs and building your startup 4x faster."
-            icon={Boxes}
-          />
-          <BentoCard
-            id="gtm"
-            title="Go-To-Market Automation"
-            desc="Generate 30-day launch roadmaps, programmatic SEO clusters, and personalized creator outreach DMs instantly."
-            icon={Briefcase}
-            span={2}
-          />
+        {/* ONE Unified Continuous Grid Canvas */}
+        <div className="w-full border border-[var(--border)] rounded-2xl md:rounded-3xl overflow-hidden bg-[var(--surface)] grid grid-cols-1 md:grid-cols-12 divide-y md:divide-y-0 divide-[var(--border)] relative">
+
+          
+          {/* Row 1 Container: 12 Cols */}
+          <div className="md:col-span-12 grid grid-cols-1 md:grid-cols-12 divide-y md:divide-y-0 md:divide-x divide-[var(--border)] border-b border-[var(--border)]">
+            
+            {/* Cell 1: Production Code Generation (Asymmetric Wide 7 Cols) */}
+            <div className="md:col-span-7 p-8 md:p-12 lg:p-14 flex flex-col justify-between group hover:bg-[var(--background)]/50 transition-colors duration-300">
+              <div>
+                <div className="w-10 h-10 rounded-xl bg-[var(--background)] border border-[var(--border)] flex items-center justify-center mb-6 text-[var(--foreground)] group-hover:scale-110 transition-transform">
+                  <Code2 className="w-5 h-5" />
+                </div>
+                <h3 className="text-2xl md:text-4xl font-extrabold mb-4 tracking-tight text-[var(--foreground)]">
+                  Production Code Generation
+                </h3>
+                <p className="text-[var(--muted)] text-base md:text-lg leading-relaxed mb-8 max-w-lg font-medium">
+                  Not just mockups. Xcelerate writes complete Next.js 15 applications with Tailwind CSS, Supabase databases, and fully typed APIs. Ready to deploy to Vercel with one click.
+                </p>
+              </div>
+              <div className="w-full mt-4">
+                <CodeVisual />
+              </div>
+            </div>
+
+            {/* Cell 2: Financial Modeling (Compact 5 Cols) */}
+            <div className="md:col-span-5 p-8 md:p-12 lg:p-14 flex flex-col justify-between group hover:bg-[var(--background)]/50 transition-colors duration-300">
+              <div>
+                <div className="w-10 h-10 rounded-xl bg-[var(--background)] border border-[var(--border)] flex items-center justify-center mb-6 text-[var(--foreground)] group-hover:scale-110 transition-transform">
+                  <LineChart className="w-5 h-5" />
+                </div>
+                <h3 className="text-2xl md:text-3xl font-extrabold mb-4 tracking-tight text-[var(--foreground)]">
+                  Financial Modeling
+                </h3>
+                <p className="text-[var(--muted)] text-base leading-relaxed mb-8 font-medium">
+                  Instant 5-year unit economics, MRR projections, and cap table generation for your pitch deck.
+                </p>
+              </div>
+              <div className="w-full mt-4">
+                <FinanceVisual />
+              </div>
+            </div>
+
+          </div>
+
+          {/* Row 2 Container: 12 Cols */}
+          <div className="md:col-span-12 grid grid-cols-1 md:grid-cols-12 divide-y md:divide-y-0 md:divide-x divide-[var(--border)]">
+            
+            {/* Cell 3: Parallel Agents (Compact 5 Cols) */}
+            <div className="md:col-span-5 p-8 md:p-12 lg:p-14 flex flex-col justify-between group hover:bg-[var(--background)]/50 transition-colors duration-300">
+              <div>
+                <div className="w-10 h-10 rounded-xl bg-[var(--background)] border border-[var(--border)] flex items-center justify-center mb-6 text-[var(--foreground)] group-hover:scale-110 transition-transform">
+                  <Boxes className="w-5 h-5" />
+                </div>
+                <h3 className="text-2xl md:text-3xl font-extrabold mb-4 tracking-tight text-[var(--foreground)]">
+                  Parallel Agents
+                </h3>
+                <p className="text-[var(--muted)] text-base leading-relaxed mb-8 font-medium">
+                  4 specialized agents work simultaneously, debating trade-offs and building your startup 4x faster.
+                </p>
+              </div>
+              <div className="w-full mt-4">
+                <SwarmVisual />
+              </div>
+            </div>
+
+            {/* Cell 4: Go-To-Market Automation (Asymmetric Wide 7 Cols) */}
+            <div className="md:col-span-7 p-8 md:p-12 lg:p-14 flex flex-col justify-between group hover:bg-[var(--background)]/50 transition-colors duration-300">
+              <div>
+                <div className="w-10 h-10 rounded-xl bg-[var(--background)] border border-[var(--border)] flex items-center justify-center mb-6 text-[var(--foreground)] group-hover:scale-110 transition-transform">
+                  <Briefcase className="w-5 h-5" />
+                </div>
+                <h3 className="text-2xl md:text-4xl font-extrabold mb-4 tracking-tight text-[var(--foreground)]">
+                  Go-To-Market Automation
+                </h3>
+                <p className="text-[var(--muted)] text-base md:text-lg leading-relaxed mb-8 max-w-lg font-medium">
+                  Generate 30-day launch roadmaps, programmatic SEO clusters, and personalized creator outreach DMs instantly.
+                </p>
+              </div>
+              <div className="w-full mt-4">
+                <GtmVisual />
+              </div>
+            </div>
+
+          </div>
+
         </div>
       </section>
+
 
       {/* CTA Section */}
       <section className="relative z-10 py-32 px-6 max-w-4xl mx-auto text-center border-t border-[var(--border)]">
@@ -892,10 +804,11 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="border-t border-[var(--border)] py-12 px-6 bg-[var(--background)]">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-2">
-            <Zap className="w-5 h-5 text-[var(--foreground)] fill-[var(--foreground)]" />
+          <div className="flex items-center gap-2.5">
+            <XcelerateLogo size={24} className="text-[var(--foreground)]" />
             <span className="font-bold tracking-tight text-[var(--foreground)]">Xcelerate</span>
           </div>
+
           <div className="flex items-center gap-6 text-sm text-[var(--muted)] font-medium">
             <span>© {new Date().getFullYear()} Xcelerate Inc.</span>
             <a href="#" className="hover:text-[var(--foreground)] transition-colors">Twitter</a>
