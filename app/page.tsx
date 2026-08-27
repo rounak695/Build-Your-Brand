@@ -443,7 +443,7 @@ export default function LandingPage() {
 
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-[var(--muted)]">
             <a href="#features" className="hover:text-[var(--foreground)] transition-colors">Features</a>
-            <a href="#agents" className="hover:text-[var(--foreground)] transition-colors">AI Swarm</a>
+            <a href="/swarm" className="hover:text-[var(--foreground)] transition-colors">AI Swarm</a>
             <a href="#pricing" className="hover:text-[var(--foreground)] transition-colors">Pricing</a>
           </div>
           <div className="flex items-center gap-4">
