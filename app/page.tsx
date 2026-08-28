@@ -444,9 +444,12 @@ export default function LandingPage() {
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-[var(--muted)]">
             <a href="#features" className="hover:text-[var(--foreground)] transition-colors">Features</a>
             <a href="/swarm" className="hover:text-[var(--foreground)] transition-colors">AI Swarm</a>
-            <a href="#pricing" className="hover:text-[var(--foreground)] transition-colors">Pricing</a>
+            <a href="/waitlist" className="hover:text-[var(--foreground)] transition-colors flex items-center gap-1.5 font-semibold text-[var(--foreground)]">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              Early Access
+            </a>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <button
               onClick={toggleTheme}
               className="p-2 rounded-full border border-[var(--border)] bg-[var(--surface)] hover:bg-[var(--border)] transition-all text-[var(--muted)] hover:text-[var(--foreground)] flex items-center justify-center shadow-sm"
@@ -460,15 +463,16 @@ export default function LandingPage() {
             </button>
             <button
               onClick={() => router.push("/demo")}
-              className="text-sm font-medium text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
+              className="text-sm font-medium text-[var(--muted)] hover:text-[var(--foreground)] transition-colors hidden sm:block"
             >
               Live Demo
             </button>
             <button
-              onClick={() => inputRef.current?.focus()}
-              className="px-4 py-2 rounded-full text-sm font-bold bg-[var(--foreground)] text-[var(--background)] hover:opacity-90 transition-all shadow-sm"
+              onClick={() => router.push("/waitlist")}
+              className="px-4 py-2 rounded-full text-sm font-bold bg-[var(--foreground)] text-[var(--background)] hover:opacity-90 transition-all shadow-sm flex items-center gap-1.5"
             >
-              Start Building
+              <span>Get Early Access</span>
+              <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>
